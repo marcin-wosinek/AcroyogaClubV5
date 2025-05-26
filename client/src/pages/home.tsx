@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
-export default function HomeModern() {
+export default function Home() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -14,7 +14,7 @@ export default function HomeModern() {
     {
       id: 1,
       title: "Morning Flow",
-      date: "2024-01-15",
+      date: "2025-05-03",
       time: "09:00",
       location: "Malvarosa Beach",
       participants: 6,
@@ -24,7 +24,7 @@ export default function HomeModern() {
     {
       id: 2,
       title: "Evening Practice",
-      date: "2024-01-15",
+      date: "2025-05-03",
       time: "19:00",
       location: "Turia Gardens",
       participants: 14,
@@ -34,7 +34,7 @@ export default function HomeModern() {
     {
       id: 3,
       title: "Beginner Workshop",
-      date: "2024-01-16",
+      date: "2025-05-10",
       time: "10:00",
       location: "City of Arts & Sciences",
       participants: 8,
@@ -44,7 +44,7 @@ export default function HomeModern() {
     {
       id: 4,
       title: "Advanced Flow",
-      date: "2024-01-18",
+      date: "2025-05-15",
       time: "18:30",
       location: "Malvarosa Beach",
       participants: 4,
@@ -54,12 +54,42 @@ export default function HomeModern() {
     {
       id: 5,
       title: "Sunrise Session",
-      date: "2024-01-20",
+      date: "2025-05-22",
       time: "07:30",
       location: "Turia Gardens",
       participants: 10,
       capacity: 15,
       price: 15
+    },
+    {
+      id: 6,
+      title: "Partner Acro",
+      date: "2025-06-05",
+      time: "17:00",
+      location: "Malvarosa Beach",
+      participants: 12,
+      capacity: 16,
+      price: 20
+    },
+    {
+      id: 7,
+      title: "Flow & Meditation",
+      date: "2025-06-12",
+      time: "08:00",
+      location: "Turia Gardens",
+      participants: 8,
+      capacity: 12,
+      price: 15
+    },
+    {
+      id: 8,
+      title: "Advanced Workshop",
+      date: "2025-06-18",
+      time: "16:00",
+      location: "City of Arts & Sciences",
+      participants: 6,
+      capacity: 10,
+      price: 25
     }
   ];
 
@@ -77,7 +107,7 @@ export default function HomeModern() {
   };
 
   const modifiersClassNames = {
-    hasActivity: 'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:transform after:-translate-x-1/2 after:w-1 after:h-1 after:bg-white after:rounded-full',
+    hasActivity: 'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:transform after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-white after:rounded-full',
   };
 
   return (
@@ -137,7 +167,7 @@ export default function HomeModern() {
                 onSelect={setDate}
                 modifiers={modifiers}
                 modifiersClassNames={modifiersClassNames}
-                className="w-full [&_.rdp-day_selected]:bg-white [&_.rdp-day_selected]:text-black"
+                className="w-full [&_.rdp-day_selected]:bg-white [&_.rdp-day_selected]:text-black [&_.rdp-day_selected]:rounded-lg [&_.rdp-day_selected]:before:content-[''] [&_.rdp-day_selected]:before:absolute [&_.rdp-day_selected]:before:inset-0 [&_.rdp-day_selected]:before:bg-white [&_.rdp-day_selected]:before:opacity-20 [&_.rdp-day_selected]:before:rounded-lg [&_.rdp-day_selected]:before:-z-10"
               />
             </div>
           </div>
