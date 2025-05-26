@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
-import { mockActivities, formatTime } from "../mockData";
+import { formatTime } from "../mockData";
+import { useActivities } from "../hooks/use-activities";
 import type { Activity } from "../../../shared/schema";
 
 export default function Home() {
@@ -14,6 +15,9 @@ export default function Home() {
   const searchParams = useSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Load activities data using React Query
+  const { data: activities = [], isLoading, error } = useActivities();
 
   // Parse date from URL or default to today
   const getInitialDate = (): Date => {
@@ -82,12 +86,12 @@ export default function Home() {
   };
 
   const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
-  const activitiesForSelectedDate = mockActivities.filter((activity: Activity) => {
+  const activitiesForSelectedDate = activities.filter((activity: Activity) => {
     const activityDate = formatDateString(activity.dateTime);
     return activityDate === selectedDateString;
   });
 
-  const datesWithActivities = mockActivities.map((activity: Activity) => activity.dateTime);
+  const datesWithActivities = activities.map((activity: Activity) => activity.dateTime);
 
   const modifiers = {
     hasActivity: datesWithActivities,
@@ -260,7 +264,19 @@ export default function Home() {
                 {date ? `Activities for ${date.toLocaleDateString()}` : "Today's Activities"}
               </h3>
               <div className="space-y-4">
-                {activitiesForSelectedDate.length > 0 ? (
+                {isLoading ? (
+                  <div className="text-center py-8">
+                    <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Loading activities...
+                    </div>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-8">
+                    <div className="text-red-500">
+                      Failed to load activities. Please try again.
+                    </div>
+                  </div>
+                ) : activitiesForSelectedDate.length > 0 ? (
                   activitiesForSelectedDate.map((activity) => (
                     <Card key={activity.id} className={`border transition-colors duration-300 ${
                       isDarkMode 
