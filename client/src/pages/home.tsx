@@ -5,12 +5,13 @@ import { useLocation, useSearch, Link } from "wouter";
 import { ActivityCalendar } from "../components/ActivityCalendar";
 import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
 import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Home() {
   const [location, setLocation] = useLocation();
   const searchParams = useSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
 
   const formatDateString = (date: Date) => {
@@ -54,28 +55,11 @@ export default function Home() {
     }
   };
 
-  // Detect system preference and set initial theme
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDarkMode(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDarkMode(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
   // Update date when URL changes (for browser back/forward)
   useEffect(() => {
     const newDate = getInitialDate();
     setDate(newDate);
   }, [searchParams]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${

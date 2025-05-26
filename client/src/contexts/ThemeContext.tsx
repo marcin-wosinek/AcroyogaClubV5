@@ -1,48 +1,22 @@
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-
-interface ThemeContextType {
+type ThemeContextType = {
   isDarkMode: boolean;
   toggleTheme: () => void;
-  setTheme: (isDark: boolean) => void;
-}
+};
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // Check local storage first, then system preference
-    const saved = localStorage.getItem('theme');
-    if (saved !== null) {
-      return saved === 'dark';
-    }
-    
-    // Fallback to system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
-  // Update localStorage when theme changes
-  useEffect(() => {
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-    
-    // Optional: Add/remove dark class to body for CSS purposes
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  // Listen for system preference changes only if no manual preference is set
+  // Detect system preference and set initial theme
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDarkMode(mediaQuery.matches);
     
     const handleChange = (e: MediaQueryListEvent) => {
-      // Only update if user hasn't manually set a preference
-      const hasManualPreference = localStorage.getItem('theme') !== null;
-      if (!hasManualPreference) {
-        setIsDarkMode(e.matches);
-      }
+      setIsDarkMode(e.matches);
     };
     
     mediaQuery.addEventListener('change', handleChange);
@@ -50,15 +24,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
-
-  const setTheme = (isDark: boolean) => {
-    setIsDarkMode(isDark);
+    setIsDarkMode(!isDarkMode);
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

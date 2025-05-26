@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Users, MapPin, Clock, Calendar as CalendarIcon, Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useLocation, Link } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
 import { AddToCalendarModal } from "../components/AddToCalendarModal";
 import { useAuth } from "../hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "../contexts/ThemeContext";
 import type { Activity } from "../../../shared/schema";
 
 export default function ActivityDetail() {
