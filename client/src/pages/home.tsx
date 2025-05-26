@@ -242,7 +242,7 @@ export default function Home() {
                         }`}>
                           <div className="flex items-center space-x-3">
                             <Clock className="h-4 w-4" />
-                            <span>{activity.time}</span>
+                            <span>{formatTime(activity.dateTime)}</span>
                           </div>
                           <div className="flex items-center space-x-3">
                             <MapPin className="h-4 w-4" />
@@ -250,7 +250,7 @@ export default function Home() {
                           </div>
                           <div className="flex items-center space-x-3">
                             <Users className="h-4 w-4" />
-                            <span>{activity.participants}/{activity.capacity}</span>
+                            <span>{activity.participantCount}/{activity.capacity}</span>
                           </div>
                         </div>
                         
