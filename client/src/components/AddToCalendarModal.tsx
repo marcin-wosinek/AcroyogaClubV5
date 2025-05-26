@@ -113,10 +113,10 @@ END:VCALENDAR`;
           <div className="space-y-3">
             <Button
               onClick={openGoogleCalendar}
-              className={`w-full justify-start gap-3 ${
+              className={`w-full justify-start gap-3 border-0 ${
                 isDarkMode 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  ? 'bg-white text-black hover:bg-gray-200' 
+                  : 'bg-black text-white hover:bg-gray-800'
               }`}
             >
               <ExternalLink className="h-4 w-4" />
@@ -125,11 +125,10 @@ END:VCALENDAR`;
 
             <Button
               onClick={downloadICalFile}
-              variant="outline"
-              className={`w-full justify-start gap-3 ${
+              className={`w-full justify-start gap-3 border-0 ${
                 isDarkMode 
-                  ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black'
+                  ? 'bg-white text-black hover:bg-gray-200' 
+                  : 'bg-black text-white hover:bg-gray-800'
               }`}
             >
               <Download className="h-4 w-4" />
