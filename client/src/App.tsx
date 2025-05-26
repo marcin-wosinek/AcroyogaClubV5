@@ -1,16 +1,16 @@
-import { Switch, Route } from "wouter";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import { AuthProvider } from "./contexts/AuthContext";
-import Home from "@/pages/home";
-import ActivityDetail from "@/pages/activity-detail";
 import About from "@/pages/about";
+import ActivityDetail from "@/pages/activity-detail";
 import Contact from "@/pages/contact";
-import NotFound from "@/pages/not-found";
+import Home from "@/pages/home";
 import Login from "@/pages/login";
+import NotFound from "@/pages/not-found";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Switch, Route } from "wouter";
 
 function Router() {
   return (

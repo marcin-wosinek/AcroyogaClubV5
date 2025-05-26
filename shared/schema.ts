@@ -68,9 +68,13 @@ export const signUps = pgTable("sign_ups", {
   /** Unique identifier for the sign-up */
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   /** Reference to the user who signed up */
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
   /** Reference to the activity being signed up for */
-  activityId: integer("activity_id").references(() => activities.id).notNull(),
+  activityId: integer("activity_id")
+    .references(() => activities.id)
+    .notNull(),
   /** Reference to the payment transaction (if payment required) */
   transactionId: integer("transaction_id").references(() => transactions.id),
   /** Timestamp when the sign-up was created */
@@ -85,7 +89,9 @@ export const transactions = pgTable("transactions", {
   /** Unique identifier for the transaction */
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   /** Reference to the user making the payment */
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
   /** Reference to activity sign-up (if paying for activity) */
   signUpId: integer("sign_up_id").references(() => signUps.id),
   /** Reference to membership fee (if paying membership) */
@@ -123,9 +129,13 @@ export const membershipFees = pgTable("membership_fees", {
   /** Unique identifier for the membership fee */
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   /** Reference to the user who owes the fee */
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id")
+    .references(() => users.id)
+    .notNull(),
   /** Reference to the trimester period */
-  trimesterId: integer("trimester_id").references(() => trimesters.id).notNull(),
+  trimesterId: integer("trimester_id")
+    .references(() => trimesters.id)
+    .notNull(),
   /** Amount due for this membership period */
   fee: decimal("fee", { precision: 10, scale: 2 }).notNull(),
   /** Payment status: 'paid' | 'pending' | 'cancelled' */
@@ -288,25 +298,27 @@ export type LoginCredentials = z.infer<typeof LoginSchema>;
  * Registration schema
  * Used for new user registration with validation
  */
-export const RegistrationSchema = z.object({
-  /** Full name of the new user */
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  /** Email address for the account */
-  email: z.string().email("Please enter a valid email address"),
-  /** Password with strength requirements */
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  /** Password confirmation for validation */
-  confirmPassword: z.string(),
-  /** Acroyoga experience level */
-  experience: ExperienceLevelEnum.optional(),
-  /** Roles the user can perform */
-  roles: z.array(AcroyogaRoleEnum).optional(),
-  /** Email notification preference */
-  mailingEnabled: z.boolean().default(true),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+export const RegistrationSchema = z
+  .object({
+    /** Full name of the new user */
+    fullName: z.string().min(2, "Full name must be at least 2 characters"),
+    /** Email address for the account */
+    email: z.string().email("Please enter a valid email address"),
+    /** Password with strength requirements */
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    /** Password confirmation for validation */
+    confirmPassword: z.string(),
+    /** Acroyoga experience level */
+    experience: ExperienceLevelEnum.optional(),
+    /** Roles the user can perform */
+    roles: z.array(AcroyogaRoleEnum).optional(),
+    /** Email notification preference */
+    mailingEnabled: z.boolean().default(true),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 export type RegistrationData = z.infer<typeof RegistrationSchema>;
 
 /**
@@ -351,12 +363,16 @@ export const ActivityWithParticipantsSchema = z.object({
   priceForNonMembers: z.string().nullable(),
   createdAt: z.date(),
   /** List of signed-up participants */
-  participants: z.array(z.object({
-    id: z.number(),
-    fullName: z.string(),
-    email: z.string(),
-    isMember: z.boolean(),
-  })).optional(),
+  participants: z
+    .array(
+      z.object({
+        id: z.number(),
+        fullName: z.string(),
+        email: z.string(),
+        isMember: z.boolean(),
+      }),
+    )
+    .optional(),
 });
 export type ActivityWithParticipants = z.infer<typeof ActivityWithParticipantsSchema>;
 
@@ -380,16 +396,17 @@ export type UserProfileUpdate = z.infer<typeof UserProfileUpdateSchema>;
  * API response wrapper schema
  * Standard format for API responses
  */
-export const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) => z.object({
-  /** Whether the request was successful */
-  success: z.boolean(),
-  /** Response data (present on success) */
-  data: dataSchema.optional(),
-  /** Error message (present on failure) */
-  error: z.string().optional(),
-  /** Additional error details for debugging */
-  details: z.record(z.any()).optional(),
-});
+export const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.object({
+    /** Whether the request was successful */
+    success: z.boolean(),
+    /** Response data (present on success) */
+    data: dataSchema.optional(),
+    /** Error message (present on failure) */
+    error: z.string().optional(),
+    /** Additional error details for debugging */
+    details: z.record(z.any()).optional(),
+  });
 
 /**
  * Pagination parameters schema
@@ -413,22 +430,23 @@ export type PaginationParams = z.infer<typeof PaginationSchema>;
  * Paginated response schema
  * Standard format for paginated API responses
  */
-export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) => z.object({
-  /** Array of items for current page */
-  items: z.array(itemSchema),
-  /** Total number of items across all pages */
-  total: z.number(),
-  /** Current page number */
-  page: z.number(),
-  /** Number of items per page */
-  limit: z.number(),
-  /** Total number of pages */
-  pages: z.number(),
-  /** Whether there are more pages */
-  hasNext: z.boolean(),
-  /** Whether there are previous pages */
-  hasPrev: z.boolean(),
-});
+export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z.object({
+    /** Array of items for current page */
+    items: z.array(itemSchema),
+    /** Total number of items across all pages */
+    total: z.number(),
+    /** Current page number */
+    page: z.number(),
+    /** Number of items per page */
+    limit: z.number(),
+    /** Total number of pages */
+    pages: z.number(),
+    /** Whether there are more pages */
+    hasNext: z.boolean(),
+    /** Whether there are previous pages */
+    hasPrev: z.boolean(),
+  });
 
 /**
  * Dashboard statistics schema

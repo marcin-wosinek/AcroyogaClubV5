@@ -1,8 +1,8 @@
-import express, { type Request, Response, NextFunction } from "express";
-import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import dotenv from "dotenv";
+import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
 
 dotenv.config();
 
@@ -11,18 +11,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Configure session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'acroyoga-club-session-secret-key',
-  resave: false,
-  saveUninitialized: true, // Create session for anonymous users
-  name: 'acroyoga.sid', // Custom session cookie name
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    httpOnly: true, // Prevent XSS attacks
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    sameSite: 'lax' // CSRF protection
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "acroyoga-club-session-secret-key",
+    resave: false,
+    saveUninitialized: true, // Create session for anonymous users
+    name: "acroyoga.sid", // Custom session cookie name
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      httpOnly: true, // Prevent XSS attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "lax", // CSRF protection
+    },
+  }),
+);
 
 app.use((req, res, next) => {
   const start = Date.now();

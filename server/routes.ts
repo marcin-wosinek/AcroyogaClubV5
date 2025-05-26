@@ -1,8 +1,8 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { loginHandler, logoutHandler, sessionHandler, sessionTrackingMiddleware } from "./auth";
 import { contactHandler } from "./contact";
+import { storage } from "./storage";
+import type { Express } from "express";
+import { createServer, type Server } from "http";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session tracking middleware - creates session for all requests
@@ -10,12 +10,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Health check endpoint with session info
   app.get("/api/health", (req, res) => {
-    res.json({ 
-      status: "ok", 
+    res.json({
+      status: "ok",
       message: "Server is running",
       timestamp: new Date().toISOString(),
       sessionId: req.sessionID,
-      visitCount: req.session.visitCount
+      visitCount: req.session.visitCount,
     });
   });
 
@@ -27,8 +27,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       description: "A minimalistic fullstack JavaScript boilerplate",
       endpoints: {
         health: "/api/health",
-        users: "/api/users (placeholder)"
-      }
+        users: "/api/users (placeholder)",
+      },
     });
   });
 
@@ -38,7 +38,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // This is where you would implement user fetching logic
       res.json({
         message: "Users endpoint ready for implementation",
-        users: []
+        users: [],
       });
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -50,7 +50,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // This is where you would implement user creation logic
       res.json({
         message: "User creation endpoint ready for implementation",
-        data: req.body
+        data: req.body,
       });
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });

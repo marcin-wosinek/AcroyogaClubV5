@@ -23,11 +23,11 @@ desktop and mobile devices.
 To run the application locally, you'll need Node.js installed on your system.
 Start by cloning the repository and installing the dependencies:
 
-```npm install ```
+`npm install `
 
 Once the dependencies are installed, start the development server:
 
-```npm run dev ```
+`npm run dev `
 
 The application will be available at `http://localhost:5000`. The development
 server runs both the React frontend and Express backend together, with hot

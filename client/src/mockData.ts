@@ -26,7 +26,8 @@ export const mockActivities: MockActivity[] = [
     title: "Morning Flow",
     locationName: "Malvarosa Beach",
     locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
-    description: "Start your day with energizing acroyoga flows by the Mediterranean sea. Perfect for all levels.",
+    description:
+      "Start your day with energizing acroyoga flows by the Mediterranean sea. Perfect for all levels.",
     image: null,
     dateTime: new Date("2025-05-03T09:00:00Z"),
     participantCount: 6,
@@ -39,7 +40,8 @@ export const mockActivities: MockActivity[] = [
     title: "Evening Practice",
     locationName: "Turia Gardens",
     locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
-    description: "Wind down with gentle acroyoga practice in the beautiful Turia Gardens. Focus on trust and connection.",
+    description:
+      "Wind down with gentle acroyoga practice in the beautiful Turia Gardens. Focus on trust and connection.",
     image: null,
     dateTime: new Date("2025-05-03T19:00:00Z"),
     participantCount: 14,
@@ -52,7 +54,8 @@ export const mockActivities: MockActivity[] = [
     title: "Beginner Workshop",
     locationName: "City of Arts & Sciences",
     locationAddress: "Av. del Professor López Piñero, 7, 46013 Valencia, Spain",
-    description: "Complete introduction to acroyoga for absolute beginners. Learn basic positions and safety techniques.",
+    description:
+      "Complete introduction to acroyoga for absolute beginners. Learn basic positions and safety techniques.",
     image: null,
     dateTime: new Date("2025-05-10T10:00:00Z"),
     participantCount: 8,
@@ -65,7 +68,8 @@ export const mockActivities: MockActivity[] = [
     title: "Advanced Flow",
     locationName: "Malvarosa Beach",
     locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
-    description: "Challenge yourself with advanced acroyoga sequences. Requires solid foundation in basic poses.",
+    description:
+      "Challenge yourself with advanced acroyoga sequences. Requires solid foundation in basic poses.",
     image: null,
     dateTime: new Date("2025-05-15T18:30:00Z"),
     participantCount: 4,
@@ -78,7 +82,8 @@ export const mockActivities: MockActivity[] = [
     title: "Sunrise Session",
     locationName: "Turia Gardens",
     locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
-    description: "Early morning practice to greet the sun. Meditation, breathwork, and gentle acroyoga flows.",
+    description:
+      "Early morning practice to greet the sun. Meditation, breathwork, and gentle acroyoga flows.",
     image: null,
     dateTime: new Date("2025-05-22T07:30:00Z"),
     participantCount: 10,
@@ -91,7 +96,8 @@ export const mockActivities: MockActivity[] = [
     title: "Partner Acro",
     locationName: "Malvarosa Beach",
     locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
-    description: "Focus on partner-based acroyoga techniques. Build trust and communication with your practice partner.",
+    description:
+      "Focus on partner-based acroyoga techniques. Build trust and communication with your practice partner.",
     image: null,
     dateTime: new Date("2025-06-05T17:00:00Z"),
     participantCount: 12,
@@ -104,7 +110,8 @@ export const mockActivities: MockActivity[] = [
     title: "Flow & Meditation",
     locationName: "Turia Gardens",
     locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
-    description: "Combine acroyoga with mindfulness meditation. Find balance between movement and stillness.",
+    description:
+      "Combine acroyoga with mindfulness meditation. Find balance between movement and stillness.",
     image: null,
     dateTime: new Date("2025-06-12T08:00:00Z"),
     participantCount: 8,
@@ -117,7 +124,8 @@ export const mockActivities: MockActivity[] = [
     title: "Advanced Workshop",
     locationName: "City of Arts & Sciences",
     locationAddress: "Av. del Professor López Piñero, 7, 46013 Valencia, Spain",
-    description: "Master advanced acroyoga techniques with expert instruction. Intensive 3-hour workshop.",
+    description:
+      "Master advanced acroyoga techniques with expert instruction. Intensive 3-hour workshop.",
     image: null,
     dateTime: new Date("2025-06-18T16:00:00Z"),
     participantCount: 6,
@@ -130,7 +138,8 @@ export const mockActivities: MockActivity[] = [
     title: "Therapeutic Acro",
     locationName: "Wellness Center Valencia",
     locationAddress: "Carrer de Xàtiva, 24, 46002 Valencia, Spain",
-    description: "Gentle therapeutic acroyoga for injury recovery and stress relief. Suitable for all ages.",
+    description:
+      "Gentle therapeutic acroyoga for injury recovery and stress relief. Suitable for all ages.",
     image: null,
     dateTime: new Date("2025-05-28T10:30:00Z"),
     participantCount: 7,
@@ -143,7 +152,8 @@ export const mockActivities: MockActivity[] = [
     title: "Beach Sunset Flow",
     locationName: "Malvarosa Beach",
     locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
-    description: "Practice acroyoga as the sun sets over the Mediterranean. Magical atmosphere guaranteed.",
+    description:
+      "Practice acroyoga as the sun sets over the Mediterranean. Magical atmosphere guaranteed.",
     image: null,
     dateTime: new Date("2025-06-25T20:00:00Z"),
     participantCount: 15,
@@ -157,9 +167,9 @@ export const mockActivities: MockActivity[] = [
  * Helper function to format time from Date object
  */
 export function formatTime(date: Date): string {
-  return date.toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: false 
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   });
 }

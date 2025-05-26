@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import fetch from "node-fetch";
-import rateLimit from "express-rate-limit"; // Add this import
+// Add this import
 import express from "express";
+import rateLimit from "express-rate-limit";
+import fetch from "node-fetch";
 
 // Rate limiter middleware: 5 requests per hour per IP
 export const contactRateLimiter = rateLimit({
@@ -66,7 +67,7 @@ export async function contactHandler(req: Request, res: Response) {
         reply_to: email, // Use provided email as reply_to
         html: `<p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(
           /\n/g,
-          "<br>"
+          "<br>",
         )}</p>`,
       }),
     });
@@ -99,4 +100,3 @@ const router = express.Router();
 router.post("/api/contact", contactRateLimiter, contactHandler);
 
 export default router;
-

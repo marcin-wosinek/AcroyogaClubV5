@@ -1,8 +1,8 @@
-import type { Request, Response } from "express";
 import { mockUsers } from "@shared/mockData";
+import type { Request, Response } from "express";
 
 // Extend the session interface to include our custom properties
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     userId?: number;
     user?: any;
@@ -17,17 +17,17 @@ export async function loginHandler(req: Request, res: Response) {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required"
+        message: "Email and password are required",
       });
     }
 
     // Find user in shared mock data
-    const user = mockUsers.find(u => u.email === email && u.password === password);
+    const user = mockUsers.find((u) => u.email === email && u.password === password);
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password"
+        message: "Invalid email or password",
       });
     }
 
@@ -36,7 +36,7 @@ export async function loginHandler(req: Request, res: Response) {
       if (err) {
         return res.status(500).json({
           success: false,
-          message: "Session creation failed"
+          message: "Session creation failed",
         });
       }
 
@@ -47,32 +47,31 @@ export async function loginHandler(req: Request, res: Response) {
         email: user.email,
         fullName: user.fullName,
         isMember: user.isMember,
-        isAdmin: user.isAdmin
+        isAdmin: user.isAdmin,
       };
 
       req.session.save((err) => {
         if (err) {
           return res.status(500).json({
             success: false,
-            message: "Session save failed"
+            message: "Session save failed",
           });
         }
 
         console.log(`User ${user.email} logged in, new session: ${req.sessionID}`);
-        
+
         res.json({
           success: true,
           message: "Login successful",
-          user: req.session.user
+          user: req.session.user,
         });
       });
     });
-
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 }
@@ -86,14 +85,14 @@ export function logoutHandler(req: Request, res: Response) {
     if (err) {
       return res.status(500).json({
         success: false,
-        message: "Logout failed"
+        message: "Logout failed",
       });
     }
 
-    res.clearCookie('acroyoga.sid');
+    res.clearCookie("acroyoga.sid");
     res.json({
       success: true,
-      message: "Logout successful"
+      message: "Logout successful",
     });
   });
 }
@@ -103,7 +102,7 @@ export function sessionHandler(req: Request, res: Response) {
     isAuthenticated: !!req.session.userId,
     user: req.session.user || null,
     sessionId: req.sessionID,
-    visitCount: req.session.visitCount
+    visitCount: req.session.visitCount,
   });
 }
 

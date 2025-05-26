@@ -1,19 +1,18 @@
-
-import { useQuery } from "@tanstack/react-query";
-import { mockActivities } from "../mockData";
 import type { Activity } from "../../../shared/schema";
+import { mockActivities } from "../mockData";
+import { useQuery } from "@tanstack/react-query";
 
 export function useActivities() {
   return useQuery<Activity[]>({
     queryKey: ["activities"],
     queryFn: async () => {
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       // Return mock data with proper typing
-      return mockActivities.map(activity => ({
+      return mockActivities.map((activity) => ({
         ...activity,
-        priceForNonMembers: activity.priceForNonMembers || "0.00"
+        priceForNonMembers: activity.priceForNonMembers || "0.00",
       }));
     },
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
@@ -26,10 +25,10 @@ export function useActivities() {
 //   const response = await fetch("/api/activities", {
 //     credentials: "include",
 //   });
-//   
+//
 //   if (!response.ok) {
 //     throw new Error(`Failed to fetch activities: ${response.statusText}`);
 //   }
-//   
+//
 //   return response.json();
 // },

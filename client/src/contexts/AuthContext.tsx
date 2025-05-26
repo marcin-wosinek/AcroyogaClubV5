@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type { User } from '@shared/schema';
+import type { User } from "@shared/schema";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type AuthContextType = {
   user: User | null;
@@ -7,7 +7,10 @@ type AuthContextType = {
   isUser: boolean;
   isAdmin: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; message: string; user?: User }>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<{ success: boolean; message: string; user?: User }>;
   logout: () => Promise<void>;
 };
 
@@ -21,14 +24,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check session with backend on app start
     const checkSession = async () => {
       try {
-        const response = await fetch('/api/auth/session');
+        const response = await fetch("/api/auth/session");
         const data = await response.json();
-        
+
         if (data.isAuthenticated && data.user) {
           setUser(data.user);
         }
       } catch (error) {
-        console.error('Session check failed:', error);
+        console.error("Session check failed:", error);
       } finally {
         setIsLoading(false);
       }
@@ -39,10 +42,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -56,18 +59,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: false, message: result.message };
       }
     } catch (error) {
-      return { success: false, message: 'Network error. Please try again.' };
+      return { success: false, message: "Network error. Please try again." };
     }
   };
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
+      await fetch("/api/auth/logout", {
+        method: "POST",
       });
       setUser(null);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       // Still clear user state even if API call fails
       setUser(null);
     }
@@ -79,15 +82,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAdmin = isAuthenticated && user?.isAdmin === true;
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      isAuthenticated,
-      isUser,
-      isAdmin,
-      isLoading,
-      login,
-      logout,
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isUser,
+        isAdmin,
+        isLoading,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -96,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

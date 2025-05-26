@@ -1,7 +1,7 @@
+import type { Activity } from "../../../shared/schema";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Calendar, Download, ExternalLink } from "lucide-react";
-import type { Activity } from "../../../shared/schema";
 
 interface AddToCalendarModalProps {
   activity: Activity;
@@ -10,28 +10,35 @@ interface AddToCalendarModalProps {
   isDarkMode: boolean;
 }
 
-export function AddToCalendarModal({ activity, isOpen, onClose, isDarkMode }: AddToCalendarModalProps) {
+export function AddToCalendarModal({
+  activity,
+  isOpen,
+  onClose,
+  isDarkMode,
+}: AddToCalendarModalProps) {
   const formatDateForCalendar = (date: Date) => {
-    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
 
   const formatDateForICS = (date: Date) => {
-    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
 
   const createGoogleCalendarUrl = () => {
     const startTime = formatDateForCalendar(activity.dateTime);
-    
+
     // Assuming 90 minutes duration for acroyoga sessions
     const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
     const endTimeFormatted = formatDateForCalendar(endTime);
 
     const params = new URLSearchParams({
-      action: 'TEMPLATE',
+      action: "TEMPLATE",
       text: activity.title,
       dates: `${startTime}/${endTimeFormatted}`,
       location: `${activity.locationName}, ${activity.locationAddress}`,
-      details: activity.description || 'Join us for an amazing acroyoga session! Perfect for all skill levels.',
+      details:
+        activity.description ||
+        "Join us for an amazing acroyoga session! Perfect for all skill levels.",
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -39,7 +46,7 @@ export function AddToCalendarModal({ activity, isOpen, onClose, isDarkMode }: Ad
 
   const downloadICalFile = () => {
     const startTime = formatDateForICS(activity.dateTime);
-    
+
     // Assuming 90 minutes duration for acroyoga sessions
     const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
     const endTimeFormatted = formatDateForICS(endTime);
@@ -52,7 +59,7 @@ UID:${activity.id}@acroyoga-club-valencia.com
 DTSTART:${startTime}
 DTEND:${endTimeFormatted}
 SUMMARY:${activity.title}
-DESCRIPTION:${activity.description || 'Join us for an amazing acroyoga session! Perfect for all skill levels.'}
+DESCRIPTION:${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}
 LOCATION:${activity.locationName}, ${activity.locationAddress}
 STATUS:CONFIRMED
 BEGIN:VALARM
@@ -63,50 +70,55 @@ END:VALARM
 END:VEVENT
 END:VCALENDAR`;
 
-    const blob = new Blob([icsContent], { type: 'text/calendar' });
+    const blob = new Blob([icsContent], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `${activity.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
+    link.download = `${activity.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.ics`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     onClose();
   };
 
   const openGoogleCalendar = () => {
-    window.open(createGoogleCalendarUrl(), '_blank');
+    window.open(createGoogleCalendarUrl(), "_blank");
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`sm:max-w-md ${
-        isDarkMode 
-          ? 'bg-gray-900 border-gray-700 text-white' 
-          : 'bg-white border-gray-200 text-black'
-      }`}>
+      <DialogContent
+        className={`sm:max-w-md ${
+          isDarkMode
+            ? "bg-gray-900 border-gray-700 text-white"
+            : "bg-white border-gray-200 text-black"
+        }`}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
             Add to Calendar
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
-          <div className={`p-4 rounded-lg border ${
-            isDarkMode 
-              ? 'bg-gray-800 border-gray-600' 
-              : 'bg-gray-50 border-gray-200'
-          }`}>
+          <div
+            className={`p-4 rounded-lg border ${
+              isDarkMode ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"
+            }`}
+          >
             <h4 className="font-medium mb-2">{activity.title}</h4>
-            <div className={`space-y-1 text-sm ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              <p>{activity.dateTime.toLocaleDateString()} at {activity.dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-              <p>{activity.locationName}, {activity.locationAddress}</p>
+            <div className={`space-y-1 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+              <p>
+                {activity.dateTime.toLocaleDateString()} at{" "}
+                {activity.dateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              </p>
+              <p>
+                {activity.locationName}, {activity.locationAddress}
+              </p>
             </div>
           </div>
 
@@ -114,9 +126,9 @@ END:VCALENDAR`;
             <Button
               onClick={openGoogleCalendar}
               className={`w-full justify-start gap-3 border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
+                isDarkMode
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black text-white hover:bg-gray-800"
               }`}
             >
               <ExternalLink className="h-4 w-4" />
@@ -126,9 +138,9 @@ END:VCALENDAR`;
             <Button
               onClick={downloadICalFile}
               className={`w-full justify-start gap-3 border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
+                isDarkMode
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black text-white hover:bg-gray-800"
               }`}
             >
               <Download className="h-4 w-4" />
@@ -136,9 +148,9 @@ END:VCALENDAR`;
             </Button>
           </div>
 
-          <div className={`text-xs text-center pt-2 ${
-            isDarkMode ? 'text-gray-500' : 'text-gray-500'
-          }`}>
+          <div
+            className={`text-xs text-center pt-2 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}
+          >
             The iCal file works with Apple Calendar, Outlook, and other calendar apps
           </div>
         </div>
