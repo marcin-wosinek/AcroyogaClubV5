@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useSearch, Link } from "wouter";
 import { ActivityCalendar } from "../components/ActivityCalendar";
 import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 
 export default function Home() {

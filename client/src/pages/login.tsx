@@ -7,10 +7,12 @@ import { Link, useLocation } from "wouter";
 import { Sun, Moon } from "lucide-react";
 import { mockUsers } from "@shared/mockData";
 import { useTheme } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -41,8 +43,8 @@ export default function Login() {
       return;
     }
 
-    // Store user session in localStorage for demo
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    // Use the centralized auth context to log in
+    login(user);
     
     setIsLoading(false);
     // Redirect to home page
