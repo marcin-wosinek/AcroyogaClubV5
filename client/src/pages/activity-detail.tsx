@@ -5,6 +5,7 @@ import { ArrowLeft, Users, MapPin, Clock, Calendar as CalendarIcon, Menu, X, Sun
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
+import { AddToCalendarModal } from "../components/AddToCalendarModal";
 import type { Activity } from "../../../shared/schema";
 
 export default function ActivityDetail() {
@@ -12,6 +13,7 @@ export default function ActivityDetail() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   // Find the activity by ID
   const activity = mockActivities.find(a => a.id === parseInt(id || '0'));
@@ -300,6 +302,7 @@ export default function ActivityDetail() {
                 </Button>
                 <Button 
                   variant="outline"
+                  onClick={() => setShowCalendarModal(true)}
                   className={`flex-1 ${
                     isDarkMode 
                       ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' 
@@ -313,6 +316,14 @@ export default function ActivityDetail() {
           </Card>
         </div>
       </div>
+
+      {/* Add to Calendar Modal */}
+      <AddToCalendarModal 
+        activity={activity}
+        isOpen={showCalendarModal}
+        onClose={() => setShowCalendarModal(false)}
+        isDarkMode={isDarkMode}
+      />
     </div>
   );
 }
