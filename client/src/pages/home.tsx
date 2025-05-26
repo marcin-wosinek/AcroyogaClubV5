@@ -112,7 +112,11 @@ export default function Home() {
   ];
 
   const formatDateString = (date: Date) => {
-    return date.toISOString().split('T')[0];
+    // Ensure we're working with local date, not UTC
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
