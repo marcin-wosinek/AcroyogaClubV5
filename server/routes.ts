@@ -1,28 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { mockUsers } from "@shared/mockData";
-
-// Extend the session interface to include our custom properties
-declare module 'express-session' {
-  interface SessionData {
-    userId?: number;
-    user?: any;
-    visitCount?: number;
-  }
-}
+import { loginHandler, logoutHandler, sessionHandler, sessionTrackingMiddleware } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session tracking middleware - creates session for all requests
-  app.use((req, res, next) => {
-    if (!req.session.visitCount) {
-      req.session.visitCount = 1;
-      console.log(`New session created: ${req.sessionID}`);
-    } else {
-      req.session.visitCount += 1;
-    }
-    next();
-  });
+  app.use(sessionTrackingMiddleware);
 
   // Health check endpoint with session info
   app.get("/api/health", (req, res) => {
@@ -74,102 +57,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Authentication endpoints
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-
-      if (!email || !password) {
-        return res.status(400).json({
-          success: false,
-          message: "Email and password are required"
-        });
-      }
-
-      // Find user in shared mock data
-      const user = mockUsers.find(u => u.email === email && u.password === password);
-
-      if (!user) {
-        return res.status(401).json({
-          success: false,
-          message: "Invalid email or password"
-        });
-      }
-
-      // Create new session on successful login
-      req.session.regenerate((err) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            message: "Session creation failed"
-          });
-        }
-
-        // Store user info in session
-        req.session.userId = user.id;
-        req.session.user = {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-          isMember: user.isMember,
-          isAdmin: user.isAdmin
-        };
-
-        req.session.save((err) => {
-          if (err) {
-            return res.status(500).json({
-              success: false,
-              message: "Session save failed"
-            });
-          }
-
-          console.log(`User ${user.email} logged in, new session: ${req.sessionID}`);
-          
-          res.json({
-            success: true,
-            message: "Login successful",
-            user: req.session.user
-          });
-        });
-      });
-
-    } catch (error) {
-      console.error("Login error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Internal server error"
-      });
-    }
-  });
-
-  app.post("/api/auth/logout", (req, res) => {
-    if (req.session.userId) {
-      console.log(`User ${req.session.user?.email} logged out, destroying session: ${req.sessionID}`);
-    }
-
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "Logout failed"
-        });
-      }
-
-      res.clearCookie('acroyoga.sid');
-      res.json({
-        success: true,
-        message: "Logout successful"
-      });
-    });
-  });
-
-  app.get("/api/auth/session", (req, res) => {
-    res.json({
-      isAuthenticated: !!req.session.userId,
-      user: req.session.user || null,
-      sessionId: req.sessionID,
-      visitCount: req.session.visitCount
-    });
-  });
+  app.post("/api/auth/login", loginHandler);
+  app.post("/api/auth/logout", logoutHandler);
+  app.get("/api/auth/session", sessionHandler);
 
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
