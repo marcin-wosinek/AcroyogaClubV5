@@ -47,29 +47,43 @@ export default function HomeModern() {
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Activities</a>
               <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
               <a href="#" className="text-gray-300 hover:text-white transition-colors">Contact</a>
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Button className="bg-white text-black hover:bg-gray-200 border-0">
                 Login
               </Button>
             </div>
             <Button 
               variant="ghost" 
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-white hover:bg-gray-700"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-gray-800 border-t border-gray-700">
+            <div className="px-4 py-4 space-y-4">
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors py-2">Activities</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors py-2">About</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors py-2">Contact</a>
+              <Button className="w-full bg-white text-black hover:bg-gray-200 border-0">
+                Login
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
-      <div className="flex min-h-[calc(100vh-80px)]">
-        {/* Left Side - Calendar */}
-        <div className="flex-1 p-8 border-r border-gray-800">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
+        {/* Calendar Section */}
+        <div className="flex-1 p-4 lg:p-8 lg:border-r border-gray-800">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-4xl font-light mb-8 text-center">Activity Calendar</h2>
-            <div className="bg-gray-900 rounded-2xl p-8">
+            <h2 className="text-3xl lg:text-4xl font-light mb-6 lg:mb-8 text-center">Activity Calendar</h2>
+            <div className="bg-gray-900 rounded-2xl p-4 lg:p-8">
               <Calendar
                 mode="single"
                 selected={date}
@@ -80,15 +94,15 @@ export default function HomeModern() {
           </div>
         </div>
 
-        {/* Right Side - Activities */}
-        <div className="w-96 p-8 bg-gray-900">
-          <h3 className="text-2xl font-light mb-6">Today's Activities</h3>
+        {/* Activities Section */}
+        <div className="w-full lg:w-96 p-4 lg:p-8 bg-gray-900">
+          <h3 className="text-xl lg:text-2xl font-light mb-4 lg:mb-6">Today's Activities</h3>
           <div className="space-y-4">
             {activities.map((activity) => (
               <Card key={activity.id} className="bg-black border-gray-700 hover:border-gray-600 transition-colors">
-                <CardContent className="p-6">
+                <CardContent className="p-4 lg:p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-medium text-lg">{activity.title}</h4>
+                    <h4 className="font-medium text-base lg:text-lg">{activity.title}</h4>
                     <Badge variant="secondary" className="bg-gray-800 text-gray-300">
                       €{activity.price}
                     </Badge>
@@ -109,7 +123,7 @@ export default function HomeModern() {
                     </div>
                   </div>
                   
-                  <Button className="w-full mt-6 bg-white text-black hover:bg-gray-200">
+                  <Button className="w-full mt-6 bg-white text-black hover:bg-gray-200 border-0">
                     Join Activity
                   </Button>
                 </CardContent>
