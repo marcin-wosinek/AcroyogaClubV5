@@ -303,12 +303,11 @@ export default function ActivityDetail() {
                 </Button>
                 <Button 
                   size="default"
-                  variant="outline"
                   onClick={() => setShowCalendarModal(true)}
-                  className={`flex-1 h-10 ${
+                  className={`flex-1 h-10 border-0 ${
                     isDarkMode 
-                      ? 'border-gray-600 text-white hover:bg-gray-800 hover:text-white' 
-                      : 'border-gray-300 text-black hover:bg-gray-100 hover:text-black'
+                      ? 'bg-white text-black hover:bg-gray-200' 
+                      : 'bg-black text-white hover:bg-gray-800'
                   }`}
                 >
                   Add to Calendar
