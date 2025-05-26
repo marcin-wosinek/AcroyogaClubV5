@@ -5,13 +5,48 @@ import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLocation, useSearch } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
 import type { Activity } from "../../../shared/schema";
 
 export default function Home() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [location, setLocation] = useLocation();
+  const searchParams = useSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+
+  // Parse date from URL or default to today
+  const getInitialDate = (): Date => {
+    const params = new URLSearchParams(searchParams);
+    const dateParam = params.get('date');
+    
+    if (dateParam) {
+      const parsedDate = new Date(dateParam);
+      // Check if the date is valid
+      if (!isNaN(parsedDate.getTime())) {
+        return parsedDate;
+      }
+    }
+    
+    return new Date();
+  };
+
+  const [date, setDate] = useState<Date | undefined>(getInitialDate);
+
+  // Update URL when date changes (without adding to history)
+  const handleDateChange = (newDate: Date | undefined) => {
+    setDate(newDate);
+    
+    if (newDate) {
+      const dateString = formatDateString(newDate);
+      const params = new URLSearchParams(searchParams);
+      params.set('date', dateString);
+      
+      // Use replaceState to update URL without creating new history entry
+      const newUrl = `${location}?${params.toString()}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+  };
 
   // Detect system preference and set initial theme
   useEffect(() => {
@@ -25,6 +60,12 @@ export default function Home() {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  // Update date when URL changes (for browser back/forward)
+  useEffect(() => {
+    const newDate = getInitialDate();
+    setDate(newDate);
+  }, [searchParams]);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -183,7 +224,7 @@ export default function Home() {
             <h2 className="text-3xl lg:text-4xl font-light text-center flex-1">Activity Calendar</h2>
             <Button
               size="sm"
-              onClick={() => setDate(new Date())}
+              onClick={() => handleDateChange(new Date())}
               className={`ml-4 border-0 ${
                 isDarkMode 
                   ? 'bg-white text-black hover:bg-gray-200' 
@@ -202,7 +243,7 @@ export default function Home() {
               <Calendar
                 mode="single"
                 selected={date}
-                onSelect={setDate}
+                onSelect={handleDateChange}
                 modifiers={modifiers}
                 modifiersClassNames={modifiersClassNames}
                 className={`w-full [&_.rdp-day_selected]:rounded-lg [&_.rdp-day_selected]:relative [&_.rdp-day_selected]:z-10 ${
