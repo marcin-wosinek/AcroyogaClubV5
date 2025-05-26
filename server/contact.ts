@@ -10,7 +10,7 @@ export async function contactHandler(req: Request, res: Response) {
     if (!fullName || !email || !subject || !message) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required"
+        message: "All fields are required",
       });
     }
 
@@ -19,7 +19,7 @@ export async function contactHandler(req: Request, res: Response) {
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid email format"
+        message: "Invalid email format",
       });
     }
 
@@ -29,7 +29,7 @@ export async function contactHandler(req: Request, res: Response) {
       email,
       subject,
       message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Integrate with Resend API to send emails
@@ -37,23 +37,26 @@ export async function contactHandler(req: Request, res: Response) {
     if (!RESEND_API_KEY) {
       return res.status(500).json({
         success: false,
-        message: "Resend API key not configured"
+        message: "Resend API key not configured",
       });
     }
 
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "contact@acroyogaclub.com", // Change as needed
+        from: "contact@acroyoga-club.es",
         to: ["marcin.wosinek@gmail.com"], // Send to Marcin Wosinek
         subject: `[Contact] ${subject}`,
         reply_to: email, // Use provided email as reply_to
-        html: `<p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`
-      })
+        html: `<p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(
+          /\n/g,
+          "<br>"
+        )}</p>`,
+      }),
     });
 
     if (!resendResponse.ok) {
@@ -61,20 +64,20 @@ export async function contactHandler(req: Request, res: Response) {
       console.error("Resend API error:", errorText);
       return res.status(500).json({
         success: false,
-        message: "Failed to send email"
+        message: "Failed to send email",
       });
     }
 
     res.json({
       success: true,
-      message: "Message sent successfully"
+      message: "Message sent successfully",
     });
-
   } catch (error) {
     console.error("Error processing contact form:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 }
+
