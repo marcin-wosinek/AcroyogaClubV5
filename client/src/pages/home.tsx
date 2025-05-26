@@ -305,7 +305,7 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl lg:text-4xl font-light text-center mb-6 lg:mb-8">
             Activity Calendar
           </h2>
