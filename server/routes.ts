@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { loginHandler, logoutHandler, sessionHandler, sessionTrackingMiddleware } from "./auth";
+import { contactHandler } from "./contact";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session tracking middleware - creates session for all requests
@@ -62,55 +63,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/auth/session", sessionHandler);
 
   // Contact form submission endpoint
-  app.post("/api/contact", async (req, res) => {
-    try {
-      const { fullName, email, subject, message } = req.body;
-
-      // Validate required fields
-      if (!fullName || !email || !subject || !message) {
-        return res.status(400).json({
-          success: false,
-          message: "All fields are required"
-        });
-      }
-
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid email format"
-        });
-      }
-
-      // Log the contact form submission
-      console.log("Contact form submission received:", {
-        fullName,
-        email,
-        subject,
-        message,
-        timestamp: new Date().toISOString()
-      });
-
-      // TODO: Integrate with email service provider (Resend) to actually send emails
-      // For now, we'll just simulate successful processing
-      
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      res.json({
-        success: true,
-        message: "Message sent successfully"
-      });
-
-    } catch (error) {
-      console.error("Error processing contact form:", error);
-      res.status(500).json({
-        success: false,
-        message: "Internal server error"
-      });
-    }
-  });
+  app.post("/api/contact", contactHandler);
 
   const httpServer = createServer(app);
 
