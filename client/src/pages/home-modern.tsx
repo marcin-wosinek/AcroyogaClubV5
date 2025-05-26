@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
-import { Users, MapPin, Clock, Menu, X } from "lucide-react";
+import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function HomeModern() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const activities = [
+  const allActivities = [
     {
       id: 1,
       title: "Morning Flow",
@@ -30,8 +30,55 @@ export default function HomeModern() {
       participants: 14,
       capacity: 16,
       price: 15
+    },
+    {
+      id: 3,
+      title: "Beginner Workshop",
+      date: "2024-01-16",
+      time: "10:00",
+      location: "City of Arts & Sciences",
+      participants: 8,
+      capacity: 12,
+      price: 20
+    },
+    {
+      id: 4,
+      title: "Advanced Flow",
+      date: "2024-01-18",
+      time: "18:30",
+      location: "Malvarosa Beach",
+      participants: 4,
+      capacity: 8,
+      price: 18
+    },
+    {
+      id: 5,
+      title: "Sunrise Session",
+      date: "2024-01-20",
+      time: "07:30",
+      location: "Turia Gardens",
+      participants: 10,
+      capacity: 15,
+      price: 15
     }
   ];
+
+  const formatDateString = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
+  const activitiesForSelectedDate = allActivities.filter(activity => activity.date === selectedDateString);
+
+  const datesWithActivities = allActivities.map(activity => new Date(activity.date));
+
+  const modifiers = {
+    hasActivity: datesWithActivities,
+  };
+
+  const modifiersClassNames = {
+    hasActivity: 'relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:transform after:-translate-x-1/2 after:w-1 after:h-1 after:bg-white after:rounded-full',
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -88,6 +135,8 @@ export default function HomeModern() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                modifiers={modifiers}
+                modifiersClassNames={modifiersClassNames}
                 className="w-full [&_.rdp-day_selected]:bg-white [&_.rdp-day_selected]:text-black"
               />
             </div>
@@ -96,39 +145,53 @@ export default function HomeModern() {
 
         {/* Activities Section */}
         <div className="w-full lg:w-96 p-4 lg:p-8 bg-gray-900">
-          <h3 className="text-xl lg:text-2xl font-light mb-4 lg:mb-6">Today's Activities</h3>
+          <h3 className="text-xl lg:text-2xl font-light mb-4 lg:mb-6">
+            {date ? `Activities for ${date.toLocaleDateString()}` : "Today's Activities"}
+          </h3>
           <div className="space-y-4">
-            {activities.map((activity) => (
-              <Card key={activity.id} className="bg-black border-gray-700 hover:border-gray-600 transition-colors">
-                <CardContent className="p-4 lg:p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-medium text-base lg:text-lg">{activity.title}</h4>
-                    <Badge variant="secondary" className="bg-gray-800 text-gray-300">
-                      €{activity.price}
-                    </Badge>
-                  </div>
-                  
-                  <div className="space-y-3 text-sm text-gray-400">
-                    <div className="flex items-center space-x-3">
-                      <Clock className="h-4 w-4" />
-                      <span>{activity.time}</span>
+            {activitiesForSelectedDate.length > 0 ? (
+              activitiesForSelectedDate.map((activity) => (
+                <Card key={activity.id} className="bg-black border-gray-700 hover:border-gray-600 transition-colors">
+                  <CardContent className="p-4 lg:p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <h4 className="font-medium text-base lg:text-lg">{activity.title}</h4>
+                      <Badge variant="secondary" className="bg-gray-800 text-gray-300">
+                        €{activity.price}
+                      </Badge>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <MapPin className="h-4 w-4" />
-                      <span>{activity.location}</span>
+                    
+                    <div className="space-y-3 text-sm text-gray-400">
+                      <div className="flex items-center space-x-3">
+                        <Clock className="h-4 w-4" />
+                        <span>{activity.time}</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <MapPin className="h-4 w-4" />
+                        <span>{activity.location}</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Users className="h-4 w-4" />
+                        <span>{activity.participants}/{activity.capacity}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <Users className="h-4 w-4" />
-                      <span>{activity.participants}/{activity.capacity}</span>
-                    </div>
-                  </div>
-                  
-                  <Button className="w-full mt-6 bg-white text-black hover:bg-gray-200 border-0">
-                    Join Activity
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                    
+                    <Button className="w-full mt-6 bg-white text-black hover:bg-gray-200 border-0">
+                      Join Activity
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-gray-400 mb-4">
+                  <CalendarIcon className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                  <p>No activities scheduled for this date</p>
+                </div>
+                <p className="text-sm text-gray-500">
+                  Select a highlighted date to view available activities
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
