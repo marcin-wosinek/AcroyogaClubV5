@@ -307,8 +307,8 @@ export default function ActivityDetail() {
                   onClick={() => setShowCalendarModal(true)}
                   className={`flex-1 h-10 ${
                     isDarkMode 
-                      ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' 
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black'
+                      ? 'border-gray-600 text-white hover:bg-gray-800 hover:text-white' 
+                      : 'border-gray-300 text-black hover:bg-gray-100 hover:text-black'
                   }`}
                 >
                   Add to Calendar
