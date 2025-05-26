@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { mockUsers } from "@shared/mockData";
 
 // Extend the session interface to include our custom properties
 declare module 'express-session' {
@@ -84,13 +85,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // For now, using mock authentication - replace with real user lookup
-      const mockUsers = [
-        { id: 1, email: "maria.admin@acroyogavalencia.com", password: "admin123", fullName: "Maria Rodriguez", isMember: true, isAdmin: true },
-        { id: 2, email: "carlos.member@acroyogavalencia.com", password: "member123", fullName: "Carlos Mendez", isMember: true, isAdmin: false },
-        { id: 3, email: "ana.user@example.com", password: "user123", fullName: "Ana Garcia", isMember: false, isAdmin: false }
-      ];
-
+      // Find user in shared mock data
       const user = mockUsers.find(u => u.email === email && u.password === password);
 
       if (!user) {
