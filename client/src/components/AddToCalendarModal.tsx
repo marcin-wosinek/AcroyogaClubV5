@@ -16,42 +16,51 @@ export function AddToCalendarModal({
   onClose,
   isDarkMode,
 }: AddToCalendarModalProps) {
+  // Consolidated date formatting function
   const formatDateForCalendar = (date: Date) => {
     return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
 
-  const formatDateForICS = (date: Date) => {
-    return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  // Helper function to calculate end time (90 minutes after start time)
+  const calculateEndTime = (startTime: Date) => {
+    return new Date(startTime.getTime() + 90 * 60 * 1000);
+  };
+
+  // Helper function to get event description with activity URL
+  const getEventDescription = () => {
+    const activityUrl = `${window.location.origin}/activity/${activity.id}`;
+    const defaultDescription =
+      "Join us for an amazing acroyoga session! Perfect for all skill levels.";
+    return `${activity.description || defaultDescription}\n\nSee details: ${activityUrl}`;
+  };
+
+  // Helper function to get event location
+  const getEventLocation = () => {
+    return `${activity.locationName}, ${activity.locationAddress}`;
   };
 
   const createGoogleCalendarUrl = () => {
     const startTime = formatDateForCalendar(activity.dateTime);
-    const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
+    const endTime = calculateEndTime(activity.dateTime);
     const endTimeFormatted = formatDateForCalendar(endTime);
-
-    // Add a link back to the activity page
-    const activityUrl = `${window.location.origin}/activity/${activity.id}`;
-    const details = `${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}\n\nSee details: ${activityUrl}`;
 
     const params = new URLSearchParams({
       action: "TEMPLATE",
       text: activity.title,
       dates: `${startTime}/${endTimeFormatted}`,
-      location: `${activity.locationName}, ${activity.locationAddress}`,
-      details,
+      location: getEventLocation(),
+      details: getEventDescription(),
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   };
 
   const downloadICalFile = () => {
-    const startTime = formatDateForICS(activity.dateTime);
-    const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
-    const endTimeFormatted = formatDateForICS(endTime);
-    const activityUrl = `${window.location.origin}/activity/${activity.id}`;
-    const description = `${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}\n\nSee details: ${activityUrl}`;
+    const startTime = formatDateForCalendar(activity.dateTime);
+    const endTime = calculateEndTime(activity.dateTime);
+    const endTimeFormatted = formatDateForCalendar(endTime);
 
-    const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Acroyoga Club Valencia//EN\nBEGIN:VEVENT\nUID:${activity.id}@acroyoga-club-valencia.com\nDTSTART:${startTime}\nDTEND:${endTimeFormatted}\nSUMMARY:${activity.title}\nDESCRIPTION:${description}\nLOCATION:${activity.locationName}, ${activity.locationAddress}\nSTATUS:CONFIRMED\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder: ${activity.title} starts in 15 minutes\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR`;
+    const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Acroyoga Club Valencia//EN\nBEGIN:VEVENT\nUID:${activity.id}@acroyoga-club-valencia.com\nDTSTART:${startTime}\nDTEND:${endTimeFormatted}\nSUMMARY:${activity.title}\nDESCRIPTION:${getEventDescription()}\nLOCATION:${getEventLocation()}\nSTATUS:CONFIRMED\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder: ${activity.title} starts in 15 minutes\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR`;
 
     const blob = new Blob([icsContent], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
