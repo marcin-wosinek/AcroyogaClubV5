@@ -162,10 +162,9 @@ export default function Home() {
             <div className="flex items-center justify-between mb-6 lg:mb-8">
               <h2 className="text-3xl lg:text-4xl font-light text-center flex-1">Activity Calendar</h2>
               <Button
-                variant="outline"
                 size="sm"
                 onClick={() => setDate(new Date())}
-                className="ml-4 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+                className="ml-4 bg-white text-black hover:bg-gray-200 border-0"
               >
                 Today
               </Button>
