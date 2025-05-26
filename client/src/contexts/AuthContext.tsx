@@ -7,8 +7,8 @@ type AuthContextType = {
   isUser: boolean;
   isAdmin: boolean;
   isLoading: boolean;
-  login: (userData: User) => void;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<{ success: boolean; message: string; user?: User }>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,28 +18,59 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check localStorage for current user session
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
+    // Check session with backend on app start
+    const checkSession = async () => {
       try {
-        const userData = JSON.parse(storedUser);
-        setUser(userData);
+        const response = await fetch('/api/auth/session');
+        const data = await response.json();
+        
+        if (data.isAuthenticated && data.user) {
+          setUser(data.user);
+        }
       } catch (error) {
-        console.error('Error parsing stored user:', error);
-        localStorage.removeItem('currentUser');
+        console.error('Session check failed:', error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    setIsLoading(false);
+    };
+
+    checkSession();
   }, []);
 
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem('currentUser', JSON.stringify(userData));
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setUser(result.user);
+        return { success: true, message: result.message, user: result.user };
+      } else {
+        return { success: false, message: result.message };
+      }
+    } catch (error) {
+      return { success: false, message: 'Network error. Please try again.' };
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('currentUser');
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear user state even if API call fails
+      setUser(null);
+    }
   };
 
   // Calculate permissions based on user data

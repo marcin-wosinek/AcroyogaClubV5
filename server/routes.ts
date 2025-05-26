@@ -2,13 +2,35 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
+// Extend the session interface to include our custom properties
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    user?: any;
+    visitCount?: number;
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Health check endpoint
+  // Session tracking middleware - creates session for all requests
+  app.use((req, res, next) => {
+    if (!req.session.visitCount) {
+      req.session.visitCount = 1;
+      console.log(`New session created: ${req.sessionID}`);
+    } else {
+      req.session.visitCount += 1;
+    }
+    next();
+  });
+
+  // Health check endpoint with session info
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "ok", 
       message: "Server is running",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      sessionId: req.sessionID,
+      visitCount: req.session.visitCount
     });
   });
 
@@ -48,6 +70,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
     }
+  });
+
+  // Authentication endpoints
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: "Email and password are required"
+        });
+      }
+
+      // For now, using mock authentication - replace with real user lookup
+      const mockUsers = [
+        { id: 1, email: "maria.admin@acroyogavalencia.com", password: "admin123", fullName: "Maria Rodriguez", isMember: true, isAdmin: true },
+        { id: 2, email: "carlos.member@acroyogavalencia.com", password: "member123", fullName: "Carlos Mendez", isMember: true, isAdmin: false },
+        { id: 3, email: "ana.user@example.com", password: "user123", fullName: "Ana Garcia", isMember: false, isAdmin: false }
+      ];
+
+      const user = mockUsers.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid email or password"
+        });
+      }
+
+      // Create new session on successful login
+      req.session.regenerate((err) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: "Session creation failed"
+          });
+        }
+
+        // Store user info in session
+        req.session.userId = user.id;
+        req.session.user = {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          isMember: user.isMember,
+          isAdmin: user.isAdmin
+        };
+
+        req.session.save((err) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Session save failed"
+            });
+          }
+
+          console.log(`User ${user.email} logged in, new session: ${req.sessionID}`);
+          
+          res.json({
+            success: true,
+            message: "Login successful",
+            user: req.session.user
+          });
+        });
+      });
+
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error"
+      });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    if (req.session.userId) {
+      console.log(`User ${req.session.user?.email} logged out, destroying session: ${req.sessionID}`);
+    }
+
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Logout failed"
+        });
+      }
+
+      res.clearCookie('acroyoga.sid');
+      res.json({
+        success: true,
+        message: "Logout successful"
+      });
+    });
+  });
+
+  app.get("/api/auth/session", (req, res) => {
+    res.json({
+      isAuthenticated: !!req.session.userId,
+      user: req.session.user || null,
+      sessionId: req.sessionID,
+      visitCount: req.session.visitCount
+    });
   });
 
   // Contact form submission endpoint
