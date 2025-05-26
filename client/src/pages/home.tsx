@@ -176,7 +176,7 @@ export default function Home() {
                 onSelect={setDate}
                 modifiers={modifiers}
                 modifiersClassNames={modifiersClassNames}
-                className="w-full [&_.rdp-day_selected]:bg-white [&_.rdp-day_selected]:text-black [&_.rdp-day_selected]:rounded-lg [&_.rdp-day_selected]:before:content-[''] [&_.rdp-day_selected]:before:absolute [&_.rdp-day_selected]:before:inset-0 [&_.rdp-day_selected]:before:bg-white [&_.rdp-day_selected]:before:opacity-20 [&_.rdp-day_selected]:before:rounded-lg [&_.rdp-day_selected]:before:-z-10"
+                className="w-full [&_.rdp-day_selected]:bg-white [&_.rdp-day_selected]:text-black [&_.rdp-day_selected]:rounded-lg [&_.rdp-day_selected]:shadow-[0_0_0_8px_rgb(17_24_39)] [&_.rdp-day_selected]:relative [&_.rdp-day_selected]:z-10"
               />
             </div>
           </div>
