@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useLocation, useSearch } from "wouter";
+import { useLocation, useSearch, Link } from "wouter";
 import { ActivityCalendar } from "../components/ActivityCalendar";
 import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
   const [location, setLocation] = useLocation();
   const searchParams = useSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
@@ -121,13 +123,36 @@ export default function Home() {
               >
                 {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
-              <Button className={`border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
-              }`}>
-                Login
-              </Button>
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm">{user?.fullName}</span>
+                  </div>
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    onClick={logout}
+                    className={`${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                        : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                    }`}
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <Link href="/login">
+                  <Button className={`border-0 ${
+                    isDarkMode 
+                      ? 'bg-white text-black hover:bg-gray-200' 
+                      : 'bg-black text-white hover:bg-gray-800'
+                  }`}>
+                    Login
+                  </Button>
+                </Link>
+              )}
             </div>
             <div className="md:hidden flex items-center space-x-2">
               <Button 
@@ -182,13 +207,36 @@ export default function Home() {
                   : 'text-gray-600 hover:text-black'
               }`}>Contact</a>
               <div className="pt-2">
-                <Button className={`w-full border-0 ${
-                  isDarkMode 
-                    ? 'bg-white text-black hover:bg-gray-200' 
-                    : 'bg-black text-white hover:bg-gray-800'
-                }`}>
-                  Login
-                </Button>
+                {isAuthenticated ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 py-2">
+                      <User className="h-4 w-4" />
+                      <span className="text-sm">{user?.fullName}</span>
+                    </div>
+                    <Button 
+                      variant="ghost"
+                      onClick={logout}
+                      className={`w-full justify-start ${
+                        isDarkMode 
+                          ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                          : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                      }`}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Link href="/login">
+                    <Button className={`w-full border-0 ${
+                      isDarkMode 
+                        ? 'bg-white text-black hover:bg-gray-200' 
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}>
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
