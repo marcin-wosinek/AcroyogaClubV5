@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { mockActivities, formatTime, type MockActivity } from "../mockData";
 
 export default function Home() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -28,88 +29,7 @@ export default function Home() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const allActivities = [
-    {
-      id: 1,
-      title: "Morning Flow",
-      date: "2025-05-03",
-      time: "09:00",
-      location: "Malvarosa Beach",
-      participants: 6,
-      capacity: 10,
-      price: 12
-    },
-    {
-      id: 2,
-      title: "Evening Practice",
-      date: "2025-05-03",
-      time: "19:00",
-      location: "Turia Gardens",
-      participants: 14,
-      capacity: 16,
-      price: 15
-    },
-    {
-      id: 3,
-      title: "Beginner Workshop",
-      date: "2025-05-10",
-      time: "10:00",
-      location: "City of Arts & Sciences",
-      participants: 8,
-      capacity: 12,
-      price: 20
-    },
-    {
-      id: 4,
-      title: "Advanced Flow",
-      date: "2025-05-15",
-      time: "18:30",
-      location: "Malvarosa Beach",
-      participants: 4,
-      capacity: 8,
-      price: 18
-    },
-    {
-      id: 5,
-      title: "Sunrise Session",
-      date: "2025-05-22",
-      time: "07:30",
-      location: "Turia Gardens",
-      participants: 10,
-      capacity: 15,
-      price: 15
-    },
-    {
-      id: 6,
-      title: "Partner Acro",
-      date: "2025-06-05",
-      time: "17:00",
-      location: "Malvarosa Beach",
-      participants: 12,
-      capacity: 16,
-      price: 20
-    },
-    {
-      id: 7,
-      title: "Flow & Meditation",
-      date: "2025-06-12",
-      time: "08:00",
-      location: "Turia Gardens",
-      participants: 8,
-      capacity: 12,
-      price: 15
-    },
-    {
-      id: 8,
-      title: "Advanced Workshop",
-      date: "2025-06-18",
-      time: "16:00",
-      location: "City of Arts & Sciences",
-      participants: 6,
-      capacity: 10,
-      price: 25
-    }
-  ];
+  // Using properly structured mock data from shared schema
 
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
@@ -120,9 +40,12 @@ export default function Home() {
   };
 
   const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
-  const activitiesForSelectedDate = allActivities.filter(activity => activity.date === selectedDateString);
+  const activitiesForSelectedDate = mockActivities.filter((activity: MockActivity) => {
+    const activityDate = formatDateString(activity.dateTime);
+    return activityDate === selectedDateString;
+  });
 
-  const datesWithActivities = allActivities.map(activity => new Date(activity.date));
+  const datesWithActivities = mockActivities.map((activity: MockActivity) => activity.dateTime);
 
   const modifiers = {
     hasActivity: datesWithActivities,
@@ -310,7 +233,7 @@ export default function Home() {
                               ? 'bg-gray-800 text-gray-300' 
                               : 'bg-gray-200 text-gray-700'
                           }`}>
-                            €{activity.price}
+                            €{activity.priceForNonMembers}
                           </Badge>
                         </div>
                         
