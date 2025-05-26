@@ -1,19 +1,19 @@
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { mockActivities } from "../mockData";
+import { useTheme } from "../contexts/ThemeContext";
 import type { Activity } from "../../../shared/schema";
 
 interface ActivityCalendarProps {
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-  isDarkMode: boolean;
 }
 
 export function ActivityCalendar({ 
   date, 
-  onDateChange, 
-  isDarkMode
+  onDateChange
 }: ActivityCalendarProps) {
+  const { isDarkMode } = useTheme();
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
     const year = date.getFullYear();

@@ -166,8 +166,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
-
       </header>
 
       {/* Mobile Menu Popup */}
@@ -295,18 +293,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl lg:text-4xl font-light text-center mb-6 lg:mb-8">Activity Calendar</h2>
           
-          <div className="flex flex-col xl:flex-row gap-6 lg:gap-8">
-            {/* Calendar Component */}
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+            {/* Calendar */}
             <ActivityCalendar 
               date={date}
               onDateChange={handleDateChange}
-              isDarkMode={isDarkMode}
             />
-
-            {/* Activity Details Component */}
+            
+            {/* Activity Details */}
             <ActivityDetailsSummary 
               date={date}
-              isDarkMode={isDarkMode}
             />
           </div>
         </div>

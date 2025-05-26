@@ -25,23 +25,6 @@ export default function ActivityDetail() {
   // Find the activity by ID
   const activity = mockActivities.find(a => a.id === parseInt(id || '0'));
 
-  // Detect system preference and set initial theme
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDarkMode(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDarkMode(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
   const handleJoinActivity = async () => {
     if (!isAuthenticated) {
       // Redirect to login page
@@ -218,8 +201,6 @@ export default function ActivityDetail() {
             </div>
           </div>
         </div>
-        
-
       </header>
 
       {/* Mobile Menu Popup */}
@@ -350,10 +331,10 @@ export default function ActivityDetail() {
           <div className="mb-6">
             <Link href="/">
               <Button 
-                variant="ghost" 
-                className={`${
+                variant="ghost"
+                className={`transition-colors ${
                   isDarkMode 
-                    ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
                     : 'text-gray-600 hover:text-black hover:bg-gray-200'
                 }`}
               >
@@ -392,63 +373,47 @@ export default function ActivityDetail() {
                 </div>
               </div>
 
-              {/* Activity Image */}
-              {activity.image && (
-                <div className="mb-8">
-                  <img 
-                    src={activity.image} 
-                    alt={activity.title}
-                    className="w-full h-64 lg:h-80 object-cover rounded-lg"
-                  />
+              {/* Date and Time */}
+              <div className="space-y-4 mb-6">
+                <div className="flex items-center space-x-3">
+                  <CalendarIcon className="h-5 w-5 flex-shrink-0" />
+                  <span className="text-lg">
+                    {activity.dateTime.toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
                 </div>
-              )}
+                <div className="flex items-center space-x-3">
+                  <Clock className="h-5 w-5 flex-shrink-0" />
+                  <span className="text-lg">{formatTime(activity.dateTime)}</span>
+                </div>
+              </div>
 
-              {/* Activity Info */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <div className="space-y-6">
+              {/* Location */}
+              <div className="space-y-2 mb-6">
+                <div className="flex items-start space-x-3">
+                  <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="text-lg font-medium mb-3">When</h3>
-                    <div className={`space-y-3 text-sm ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      <div className="flex items-center space-x-3">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span>{activity.dateTime.toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <Clock className="h-4 w-4" />
-                        <span>{formatTime(activity.dateTime)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium mb-3">Where</h3>
-                    <div className={`text-sm ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      <div className="flex items-start space-x-3 mb-2">
-                        <MapPin className="h-4 w-4 mt-0.5" />
-                        <div>
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${activity.locationName}, ${activity.locationAddress}`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`hover:underline transition-colors ${
-                              isDarkMode 
-                                ? 'hover:text-white' 
-                                : 'hover:text-black'
-                            }`}
-                          >
-                            <div className="font-medium">{activity.locationName}</div>
-                            <div className="text-xs opacity-75">{activity.locationAddress}</div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
+                    <h3 className="font-medium">{activity.locationName}</h3>
+                    <a 
+                      href={`https://maps.google.com/?q=${encodeURIComponent(activity.locationAddress)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`text-sm transition-colors hover:underline ${
+                        isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
+                      }`}
+                    >
+                      {activity.locationAddress}
+                    </a>
                   </div>
                 </div>
+              </div>
 
+              {/* Description */}
+              <div className="space-y-3 mb-8">
                 <div>
                   <h3 className="text-lg font-medium mb-3">Description</h3>
                   <div className={`text-sm leading-relaxed ${

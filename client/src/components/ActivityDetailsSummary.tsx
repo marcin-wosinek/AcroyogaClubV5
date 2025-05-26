@@ -4,14 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Users, MapPin, Clock, Calendar as CalendarIcon } from "lucide-react";
 import { Link } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
+import { useTheme } from "../contexts/ThemeContext";
 import type { Activity } from "../../../shared/schema";
 
 interface ActivityDetailsSummaryProps {
   date: Date | undefined;
-  isDarkMode: boolean;
 }
 
-export function ActivityDetailsSummary({ date, isDarkMode }: ActivityDetailsSummaryProps) {
+export function ActivityDetailsSummary({ date }: ActivityDetailsSummaryProps) {
+  const { isDarkMode } = useTheme();
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
     const year = date.getFullYear();
