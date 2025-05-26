@@ -4,6 +4,8 @@ import type { User } from '@shared/schema';
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+  isUser: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
   login: (userData: User) => void;
   logout: () => void;
@@ -40,10 +42,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('currentUser');
   };
 
+  // Calculate permissions based on user data
+  const isAuthenticated = !!user;
+  const isUser = isAuthenticated;
+  const isAdmin = isAuthenticated && user?.isAdmin === true;
+
   return (
     <AuthContext.Provider value={{
       user,
-      isAuthenticated: !!user,
+      isAuthenticated,
+      isUser,
+      isAdmin,
       isLoading,
       login,
       logout,
