@@ -204,7 +204,6 @@ export default function Home() {
               date={date}
               onDateChange={handleDateChange}
               isDarkMode={isDarkMode}
-              onToggleTheme={toggleTheme}
             />
 
             {/* Activity Details Component */}

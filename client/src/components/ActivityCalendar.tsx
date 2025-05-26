@@ -1,6 +1,5 @@
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
 import { mockActivities } from "../mockData";
 import type { Activity } from "../../../shared/schema";
 
@@ -8,14 +7,12 @@ interface ActivityCalendarProps {
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
   isDarkMode: boolean;
-  onToggleTheme: () => void;
 }
 
 export function ActivityCalendar({ 
   date, 
   onDateChange, 
-  isDarkMode, 
-  onToggleTheme 
+  isDarkMode
 }: ActivityCalendarProps) {
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
@@ -44,31 +41,17 @@ export function ActivityCalendar({
       }`}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-medium">Calendar</h3>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={onToggleTheme}
-              className={`${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
-                  : 'text-gray-600 hover:text-black hover:bg-gray-200'
-              }`}
-            >
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => onDateChange(new Date())}
-              className={`border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
-              }`}
-            >
-              Today
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            onClick={() => onDateChange(new Date())}
+            className={`border-0 ${
+              isDarkMode 
+                ? 'bg-white text-black hover:bg-gray-200' 
+                : 'bg-black text-white hover:bg-gray-800'
+            }`}
+          >
+            Today
+          </Button>
         </div>
         <Calendar
           mode="single"
