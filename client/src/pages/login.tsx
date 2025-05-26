@@ -1,4 +1,4 @@
-import { Header } from "../components/Header";
+import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Link, useLocation } from "wouter";
 
 export default function Login() {
   const [location, setLocation] = useLocation();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,16 +38,9 @@ export default function Login() {
   };
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-black text-white" : "bg-white text-black"
-      }`}
-    >
-      <Header />
-
-      {/* Main Content */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-        <div className="w-full max-w-md">
+    <Layout maxWidth="md">
+      <div className="flex items-center justify-center min-h-[calc(100vh-160px)]">
+        <div className="w-full">
           <Card
             className={`border transition-colors duration-300 ${
               isDarkMode
@@ -160,6 +153,6 @@ export default function Login() {
           </Card>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

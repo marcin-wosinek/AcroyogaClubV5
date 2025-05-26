@@ -1,4 +1,4 @@
-import { Header } from "../components/Header";
+import { Layout } from "../components/Layout";
 import { useTheme } from "../contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,16 +9,10 @@ export default function NotFound() {
   const { isDarkMode } = useTheme();
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-black text-white" : "bg-white text-black"
-      }`}
-    >
-      <Header />
-
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
+    <Layout maxWidth="md">
+      <div className="flex items-center justify-center min-h-[calc(100vh-160px)]">
         <Card
-          className={`w-full max-w-md border transition-colors duration-300 ${
+          className={`w-full border transition-colors duration-300 ${
             isDarkMode
               ? "bg-gray-900 border-gray-700 text-white"
               : "bg-white border-gray-200 text-black"
@@ -52,6 +46,6 @@ export default function NotFound() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </Layout>
   );
 }

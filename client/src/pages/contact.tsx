@@ -1,4 +1,4 @@
-import { Header } from "../components/Header";
+import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
   const { toast } = useToast();
 
@@ -87,44 +87,104 @@ export default function Contact() {
   };
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-black text-white" : "bg-white text-black"
-      }`}
-    >
-      <Header />
+    <Layout title="Contact Us">
+      <div
+        className={`min-h-screen transition-colors duration-300 ${
+          isDarkMode ? "bg-black text-white" : "bg-white text-black"
+        }`}
+      >
+        {/* Main Content */}
+        <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Back Button */}
+            <div className="mb-6">
+              <Link href="/">
+                <Button
+                  variant="ghost"
+                  className={`transition-colors ${
+                    isDarkMode
+                      ? "text-gray-300 hover:text-white hover:bg-gray-700"
+                      : "text-gray-600 hover:text-black hover:bg-gray-200"
+                  }`}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Calendar
+                </Button>
+              </Link>
+            </div>
 
-      {/* Main Content */}
-      <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Back Button */}
-          <div className="mb-6">
-            <Link href="/">
-              <Button
-                variant="ghost"
-                className={`transition-colors ${
-                  isDarkMode
-                    ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                    : "text-gray-600 hover:text-black hover:bg-gray-200"
-                }`}
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Calendar
-              </Button>
-            </Link>
-          </div>
+            <div className="grid lg:grid-cols-2 gap-8">
+              {/* Contact Information */}
+              <div className="space-y-6">
+                <div>
+                  <h1 className="text-4xl font-light mb-4">Contact Us</h1>
+                  <p className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Have questions about acroyoga or want to join our community? We'd love to hear
+                    from you!
+                  </p>
+                </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Contact Information */}
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-4xl font-light mb-4">Contact Us</h1>
-                <p className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                  Have questions about acroyoga or want to join our community? We'd love to hear
-                  from you!
-                </p>
+                <Card
+                  className={`border transition-colors duration-300 ${
+                    isDarkMode
+                      ? "bg-black border-gray-700 text-white"
+                      : "bg-white border-gray-200 text-black"
+                  }`}
+                >
+                  <CardHeader>
+                    <CardTitle className="text-xl font-light">Get in Touch</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <Mail className="h-5 w-5" />
+                      <div>
+                        <p className="font-medium">Email</p>
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                          info@acroyogaclubvalencia.com
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Phone className="h-5 w-5" />
+                      <div>
+                        <p className="font-medium">Phone</p>
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                          +34 123 456 789
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <MapPin className="h-5 w-5 mt-1" />
+                      <div>
+                        <p className="font-medium">Location</p>
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                          Valencia, Spain
+                          <br />
+                          Various parks and studios around the city
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card
+                  className={`border transition-colors duration-300 ${
+                    isDarkMode
+                      ? "bg-black border-gray-700 text-white"
+                      : "bg-white border-gray-200 text-black"
+                  }`}
+                >
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-medium mb-3">Response Time</h3>
+                    <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      We typically respond to messages within 24 hours. For urgent matters related
+                      to upcoming activities, please call us directly.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
 
+              {/* Contact Form */}
               <Card
                 className={`border transition-colors duration-300 ${
                   isDarkMode
@@ -133,194 +193,134 @@ export default function Contact() {
                 }`}
               >
                 <CardHeader>
-                  <CardTitle className="text-xl font-light">Get in Touch</CardTitle>
+                  <CardTitle className="text-xl font-light">Send us a Message</CardTitle>
+                  {isAuthenticated && (
+                    <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      Your contact information has been pre-filled from your account.
+                    </p>
+                  )}
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <Mail className="h-5 w-5" />
-                    <div>
-                      <p className="font-medium">Email</p>
-                      <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                        info@acroyogaclubvalencia.com
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Phone className="h-5 w-5" />
-                    <div>
-                      <p className="font-medium">Phone</p>
-                      <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                        +34 123 456 789
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <MapPin className="h-5 w-5 mt-1" />
-                    <div>
-                      <p className="font-medium">Location</p>
-                      <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                        Valencia, Spain
-                        <br />
-                        Various parks and studios around the city
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                <CardContent>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Your full name"
+                                {...field}
+                                className={`${
+                                  isDarkMode
+                                    ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
+                                    : "bg-white border-gray-300 text-black placeholder:text-gray-400"
+                                }`}
+                                disabled={isAuthenticated}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-              <Card
-                className={`border transition-colors duration-300 ${
-                  isDarkMode
-                    ? "bg-black border-gray-700 text-white"
-                    : "bg-white border-gray-200 text-black"
-                }`}
-              >
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-medium mb-3">Response Time</h3>
-                  <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    We typically respond to messages within 24 hours. For urgent matters related to
-                    upcoming activities, please call us directly.
-                  </p>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email Address</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="your.email@example.com"
+                                {...field}
+                                className={`${
+                                  isDarkMode
+                                    ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
+                                    : "bg-white border-gray-300 text-black placeholder:text-gray-400"
+                                }`}
+                                disabled={isAuthenticated}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="subject"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Subject</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="What's this about?"
+                                {...field}
+                                className={`${
+                                  isDarkMode
+                                    ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
+                                    : "bg-white border-gray-300 text-black placeholder:text-gray-400"
+                                }`}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Message</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Tell us more about your question or interest in acroyoga..."
+                                rows={5}
+                                {...field}
+                                className={`${
+                                  isDarkMode
+                                    ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
+                                    : "bg-white border-gray-300 text-black placeholder:text-gray-400"
+                                }`}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button
+                        type="submit"
+                        className={`w-full border-0 ${
+                          isDarkMode
+                            ? "bg-white text-black hover:bg-gray-200"
+                            : "bg-black text-white hover:bg-gray-800"
+                        }`}
+                        disabled={form.formState.isSubmitting}
+                      >
+                        {form.formState.isSubmitting ? (
+                          "Sending..."
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Send Message
+                          </>
+                        )}
+                      </Button>
+                    </form>
+                  </Form>
                 </CardContent>
               </Card>
             </div>
-
-            {/* Contact Form */}
-            <Card
-              className={`border transition-colors duration-300 ${
-                isDarkMode
-                  ? "bg-black border-gray-700 text-white"
-                  : "bg-white border-gray-200 text-black"
-              }`}
-            >
-              <CardHeader>
-                <CardTitle className="text-xl font-light">Send us a Message</CardTitle>
-                {isAuthenticated && (
-                  <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Your contact information has been pre-filled from your account.
-                  </p>
-                )}
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Your full name"
-                              {...field}
-                              className={`${
-                                isDarkMode
-                                  ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
-                                  : "bg-white border-gray-300 text-black placeholder:text-gray-400"
-                              }`}
-                              disabled={isAuthenticated}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="email"
-                              placeholder="your.email@example.com"
-                              {...field}
-                              className={`${
-                                isDarkMode
-                                  ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
-                                  : "bg-white border-gray-300 text-black placeholder:text-gray-400"
-                              }`}
-                              disabled={isAuthenticated}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="subject"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subject</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="What's this about?"
-                              {...field}
-                              className={`${
-                                isDarkMode
-                                  ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
-                                  : "bg-white border-gray-300 text-black placeholder:text-gray-400"
-                              }`}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Message</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Tell us more about your question or interest in acroyoga..."
-                              rows={5}
-                              {...field}
-                              className={`${
-                                isDarkMode
-                                  ? "bg-gray-900 border-gray-700 text-white placeholder:text-gray-500"
-                                  : "bg-white border-gray-300 text-black placeholder:text-gray-400"
-                              }`}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <Button
-                      type="submit"
-                      className={`w-full border-0 ${
-                        isDarkMode
-                          ? "bg-white text-black hover:bg-gray-200"
-                          : "bg-black text-white hover:bg-gray-800"
-                      }`}
-                      disabled={form.formState.isSubmitting}
-                    >
-                      {form.formState.isSubmitting ? (
-                        "Sending..."
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4 mr-2" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

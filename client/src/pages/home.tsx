@@ -1,6 +1,6 @@
 import { ActivityCalendar } from "../components/ActivityCalendar";
 import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
-import { Header } from "../components/Header";
+import { Layout } from "../components/Layout";
 import { useTheme } from "../contexts/ThemeContext";
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
@@ -58,29 +58,14 @@ export default function Home() {
   }, [searchParams]);
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-black text-white" : "bg-white text-black"
-      }`}
-    >
-      <Header />
+    <Layout title="Activity Calendar">
+      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+        {/* Calendar */}
+        <ActivityCalendar date={date} onDateChange={handleDateChange} />
 
-      {/* Main Content */}
-      <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl lg:text-4xl font-light text-center mb-6 lg:mb-8">
-            Activity Calendar
-          </h2>
-
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-            {/* Calendar */}
-            <ActivityCalendar date={date} onDateChange={handleDateChange} />
-
-            {/* Activity Details */}
-            <ActivityDetailsSummary date={date} />
-          </div>
-        </div>
+        {/* Activity Details */}
+        <ActivityDetailsSummary date={date} />
       </div>
-    </div>
+    </Layout>
   );
 }
