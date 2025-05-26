@@ -1,19 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, MapPin, Clock, Calendar as CalendarIcon, Menu, X, Sun, Moon } from "lucide-react";
+import { ArrowLeft, Users, MapPin, Clock, Calendar as CalendarIcon, Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
 import { AddToCalendarModal } from "../components/AddToCalendarModal";
+import { useAuth } from "../hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import type { Activity } from "../../../shared/schema";
 
 export default function ActivityDetail() {
   const { id } = useParams<{ id: string }>();
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+  const [hasJoined, setHasJoined] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const { toast } = useToast();
 
   // Find the activity by ID
   const activity = mockActivities.find(a => a.id === parseInt(id || '0'));
@@ -33,6 +39,50 @@ export default function ActivityDetail() {
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  const handleJoinActivity = async () => {
+    if (!isAuthenticated) {
+      // Redirect to login page
+      setLocation('/login');
+      return;
+    }
+
+    if (!activity || !user) return;
+
+    setIsJoining(true);
+
+    try {
+      // Simulate API call to create sign-up
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Create a mock sign-up object (in real app, this would be sent to backend)
+      const signUp = {
+        id: Date.now(), // Mock ID
+        userId: user.id,
+        activityId: activity.id,
+        transactionId: null, // No payment required for members
+        createdAt: new Date(),
+      };
+
+      console.log('Created sign-up:', signUp);
+      
+      setHasJoined(true);
+      
+      toast({
+        title: "Successfully joined!",
+        description: `You've signed up for ${activity.title}`,
+      });
+
+    } catch (error) {
+      toast({
+        title: "Error joining activity",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsJoining(false);
+    }
   };
 
   if (!activity) {
@@ -108,13 +158,36 @@ export default function ActivityDetail() {
               >
                 {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
-              <Button className={`border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
-              }`}>
-                Login
-              </Button>
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm">{user?.fullName}</span>
+                  </div>
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    onClick={logout}
+                    className={`${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                        : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                    }`}
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <Link href="/login">
+                  <Button className={`border-0 ${
+                    isDarkMode 
+                      ? 'bg-white text-black hover:bg-gray-200' 
+                      : 'bg-black text-white hover:bg-gray-800'
+                  }`}>
+                    Login
+                  </Button>
+                </Link>
+              )}
             </div>
             <div className="md:hidden flex items-center space-x-2">
               <Button 
@@ -145,42 +218,129 @@ export default function ActivityDetail() {
           </div>
         </div>
         
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className={`md:hidden border-t transition-colors duration-300 ${
+
+      </header>
+
+      {/* Mobile Menu Popup */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          
+          {/* Menu Panel */}
+          <div className={`fixed top-0 right-0 h-full w-64 transform transition-transform duration-300 ease-in-out ${
             isDarkMode 
-              ? 'bg-gray-800 border-gray-700' 
-              : 'bg-gray-100 border-gray-300'
-          }`}>
-            <div className="px-4 py-4 space-y-4">
-              <a href="#" className={`block transition-colors py-2 ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Activities</a>
-              <a href="#" className={`block transition-colors py-2 ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>About</a>
-              <a href="#" className={`block transition-colors py-2 ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Contact</a>
-              <div className="pt-2">
-                <Button className={`w-full border-0 ${
-                  isDarkMode 
-                    ? 'bg-white text-black hover:bg-gray-200' 
-                    : 'bg-black text-white hover:bg-gray-800'
-                }`}>
-                  Login
+              ? 'bg-gray-900 text-white' 
+              : 'bg-white text-black'
+          } shadow-xl`}>
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className={`flex items-center justify-between p-4 border-b ${
+                isDarkMode ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                <h2 className="text-lg font-medium">Menu</h2>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`${
+                    isDarkMode 
+                      ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                  }`}
+                >
+                  <X className="h-5 w-5" />
                 </Button>
+              </div>
+              
+              {/* Menu Items */}
+              <div className="flex-1 px-4 py-6">
+                <nav className="space-y-6">
+                  <Link href="/">
+                    <a 
+                      className={`block text-lg transition-colors ${
+                        isDarkMode 
+                          ? 'text-gray-300 hover:text-white' 
+                          : 'text-gray-600 hover:text-black'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Activities
+                    </a>
+                  </Link>
+                  <a 
+                    href="#" 
+                    className={`block text-lg transition-colors ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white' 
+                        : 'text-gray-600 hover:text-black'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    About
+                  </a>
+                  <a 
+                    href="#" 
+                    className={`block text-lg transition-colors ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white' 
+                        : 'text-gray-600 hover:text-black'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Contact
+                  </a>
+                </nav>
+              </div>
+              
+              {/* Authentication Section */}
+              <div className={`p-4 border-t ${
+                isDarkMode ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                {isAuthenticated ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3 py-2">
+                      <User className="h-5 w-5" />
+                      <span className="text-sm font-medium">{user?.fullName}</span>
+                    </div>
+                    <Button 
+                      variant="ghost"
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`w-full justify-start ${
+                        isDarkMode 
+                          ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                          : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                      }`}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Link href="/login">
+                    <Button 
+                      className={`w-full border-0 ${
+                        isDarkMode 
+                          ? 'bg-white text-black hover:bg-gray-200' 
+                          : 'bg-black text-white hover:bg-gray-800'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
@@ -306,13 +466,15 @@ export default function ActivityDetail() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="default"
+                  onClick={handleJoinActivity}
+                  disabled={isJoining || hasJoined}
                   className={`flex-1 h-10 border-0 ${
                     isDarkMode 
                       ? 'bg-white text-black hover:bg-gray-200' 
                       : 'bg-black text-white hover:bg-gray-800'
-                  }`}
+                  } ${(isJoining || hasJoined) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  Join Activity
+                  {isJoining ? 'Joining...' : hasJoined ? 'Already Joined' : 'Join Activity'}
                 </Button>
                 <Button 
                   size="default"
