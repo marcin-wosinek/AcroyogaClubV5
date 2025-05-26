@@ -59,7 +59,8 @@ people interested in club mailing. Stores:
 Activities organized by the club. Stores:
 
 * Title,  
-* Location,  
+* Location name,  
+* Location address,  
 * Description (simple HTML),  
 * Image,  
 * Date time,  

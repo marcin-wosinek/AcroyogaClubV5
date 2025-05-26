@@ -40,8 +40,10 @@ export const activities = pgTable("activities", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   /** Name/title of the activity session */
   title: text("title").notNull(),
-  /** Physical location where the activity takes place */
-  location: text("location").notNull(),
+  /** Name of the location where the activity takes place */
+  locationName: text("location_name").notNull(),
+  /** Full address of the location where the activity takes place */
+  locationAddress: text("location_address").notNull(),
   /** Detailed description of the activity (HTML content supported) */
   description: text("description"),
   /** URL or path to the activity's promotional image */
@@ -314,8 +316,10 @@ export type RegistrationData = z.infer<typeof RegistrationSchema>;
 export const ActivityCreationSchema = z.object({
   /** Activity title/name */
   title: z.string().min(3, "Title must be at least 3 characters"),
-  /** Physical location */
-  location: z.string().min(3, "Location must be at least 3 characters"),
+  /** Location name */
+  locationName: z.string().min(3, "Location name must be at least 3 characters"),
+  /** Location address */
+  locationAddress: z.string().min(5, "Location address must be at least 5 characters"),
   /** Detailed description */
   description: z.string().optional(),
   /** Activity date and time */
@@ -337,7 +341,8 @@ export const ActivityWithParticipantsSchema = z.object({
   /** Base activity data */
   id: z.number(),
   title: z.string(),
-  location: z.string(),
+  locationName: z.string(),
+  locationAddress: z.string(),
   description: z.string().nullable(),
   image: z.string().nullable(),
   dateTime: z.date(),

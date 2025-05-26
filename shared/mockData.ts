@@ -91,7 +91,8 @@ export const mockActivities: Activity[] = [
   {
     id: 1,
     title: "Morning Flow",
-    location: "Malvarosa Beach",
+    locationName: "Malvarosa Beach",
+    locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
     description: "Start your day with energizing acroyoga flows by the Mediterranean sea. Perfect for all levels.",
     image: "/images/morning-flow.jpg",
     dateTime: new Date("2025-05-03T09:00:00Z"),
@@ -103,7 +104,8 @@ export const mockActivities: Activity[] = [
   {
     id: 2,
     title: "Evening Practice",
-    location: "Turia Gardens",
+    locationName: "Turia Gardens",
+    locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
     description: "Wind down with gentle acroyoga practice in the beautiful Turia Gardens. Focus on trust and connection.",
     image: "/images/evening-practice.jpg",
     dateTime: new Date("2025-05-03T19:00:00Z"),
@@ -115,7 +117,8 @@ export const mockActivities: Activity[] = [
   {
     id: 3,
     title: "Beginner Workshop",
-    location: "City of Arts & Sciences",
+    locationName: "City of Arts & Sciences",
+    locationAddress: "Av. del Professor López Piñero, 7, 46013 Valencia, Spain",
     description: "Complete introduction to acroyoga for absolute beginners. Learn basic positions and safety techniques.",
     image: "/images/beginner-workshop.jpg",
     dateTime: new Date("2025-05-10T10:00:00Z"),
@@ -127,7 +130,8 @@ export const mockActivities: Activity[] = [
   {
     id: 4,
     title: "Advanced Flow",
-    location: "Malvarosa Beach",
+    locationName: "Malvarosa Beach",
+    locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
     description: "Challenge yourself with advanced acroyoga sequences. Requires solid foundation in basic poses.",
     image: "/images/advanced-flow.jpg",
     dateTime: new Date("2025-05-15T18:30:00Z"),
@@ -139,7 +143,8 @@ export const mockActivities: Activity[] = [
   {
     id: 5,
     title: "Sunrise Session",
-    location: "Turia Gardens",
+    locationName: "Turia Gardens",
+    locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
     description: "Early morning practice to greet the sun. Meditation, breathwork, and gentle acroyoga flows.",
     image: "/images/sunrise-session.jpg",
     dateTime: new Date("2025-05-22T07:30:00Z"),
@@ -151,7 +156,8 @@ export const mockActivities: Activity[] = [
   {
     id: 6,
     title: "Partner Acro",
-    location: "Malvarosa Beach",
+    locationName: "Malvarosa Beach",
+    locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
     description: "Focus on partner-based acroyoga techniques. Build trust and communication with your practice partner.",
     image: "/images/partner-acro.jpg",
     dateTime: new Date("2025-06-05T17:00:00Z"),
@@ -163,7 +169,8 @@ export const mockActivities: Activity[] = [
   {
     id: 7,
     title: "Flow & Meditation",
-    location: "Turia Gardens",
+    locationName: "Turia Gardens",
+    locationAddress: "Jardín del Turia, 46003 Valencia, Spain",
     description: "Combine acroyoga with mindfulness meditation. Find balance between movement and stillness.",
     image: "/images/flow-meditation.jpg",
     dateTime: new Date("2025-06-12T08:00:00Z"),
@@ -175,7 +182,8 @@ export const mockActivities: Activity[] = [
   {
     id: 8,
     title: "Advanced Workshop",
-    location: "City of Arts & Sciences",
+    locationName: "City of Arts & Sciences",
+    locationAddress: "Av. del Professor López Piñero, 7, 46013 Valencia, Spain",
     description: "Master advanced acroyoga techniques with expert instruction. Intensive 3-hour workshop.",
     image: "/images/advanced-workshop.jpg",
     dateTime: new Date("2025-06-18T16:00:00Z"),
@@ -187,7 +195,8 @@ export const mockActivities: Activity[] = [
   {
     id: 9,
     title: "Therapeutic Acro",
-    location: "Wellness Center Valencia",
+    locationName: "Wellness Center Valencia",
+    locationAddress: "Carrer de Xàtiva, 24, 46002 Valencia, Spain",
     description: "Gentle therapeutic acroyoga for injury recovery and stress relief. Suitable for all ages.",
     image: "/images/therapeutic-acro.jpg",
     dateTime: new Date("2025-05-28T10:30:00Z"),
@@ -199,7 +208,8 @@ export const mockActivities: Activity[] = [
   {
     id: 10,
     title: "Beach Sunset Flow",
-    location: "Malvarosa Beach",
+    locationName: "Malvarosa Beach",
+    locationAddress: "Playa de la Malvarosa, 46011 Valencia, Spain",
     description: "Practice acroyoga as the sun sets over the Mediterranean. Magical atmosphere guaranteed.",
     image: "/images/sunset-flow.jpg",
     dateTime: new Date("2025-06-25T20:00:00Z"),

@@ -262,9 +262,12 @@ export default function ActivityDetail() {
                     <div className={`text-sm ${
                       isDarkMode ? 'text-gray-400' : 'text-gray-600'
                     }`}>
-                      <div className="flex items-center space-x-3">
-                        <MapPin className="h-4 w-4" />
-                        <span>{activity.location}</span>
+                      <div className="flex items-start space-x-3 mb-2">
+                        <MapPin className="h-4 w-4 mt-0.5" />
+                        <div>
+                          <div className="font-medium">{activity.locationName}</div>
+                          <div className="text-xs opacity-75">{activity.locationAddress}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
