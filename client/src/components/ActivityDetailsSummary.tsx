@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, MapPin, Clock, Calendar as CalendarIcon } from "lucide-react";
+import { Link } from "wouter";
 import { mockActivities, formatTime } from "../mockData";
 import type { Activity } from "../../../shared/schema";
 
@@ -67,13 +68,15 @@ export function ActivityDetailsSummary({ date, isDarkMode }: ActivityDetailsSumm
                   </div>
                 </div>
                 
-                <Button className={`w-full mt-6 border-0 ${
-                  isDarkMode 
-                    ? 'bg-white text-black hover:bg-gray-200' 
-                    : 'bg-black text-white hover:bg-gray-800'
-                }`}>
-                  Join Activity
-                </Button>
+                <Link href={`/activity/${activity.id}`}>
+                  <Button className={`w-full mt-6 border-0 ${
+                    isDarkMode 
+                      ? 'bg-white text-black hover:bg-gray-200' 
+                      : 'bg-black text-white hover:bg-gray-800'
+                  }`}>
+                    View Details
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))
