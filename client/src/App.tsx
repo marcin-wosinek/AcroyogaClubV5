@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Home from "@/pages/home";
 import ActivityDetail from "@/pages/activity-detail";
 import About from "@/pages/about";
+import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 import Login from "@/pages/login";
 
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/about" component={About} />
+      <Route path="/contact" component={Contact} />
       <Route path="/activity/:id" component={ActivityDetail} />
       <Route component={NotFound} />
     </Switch>

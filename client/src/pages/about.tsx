@@ -44,11 +44,13 @@ export default function About() {
                   ? 'text-gray-300 hover:text-white' 
                   : 'text-gray-600 hover:text-black'
               }`}>About</a>
-              <a href="#" className={`transition-colors ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Contact</a>
+              <Link href="/contact">
+                <a className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white' 
+                    : 'text-gray-600 hover:text-black'
+                }`}>Contact</a>
+              </Link>
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -183,17 +185,18 @@ export default function About() {
                   >
                     About
                   </a>
-                  <a 
-                    href="#" 
-                    className={`block text-lg transition-colors ${
-                      isDarkMode 
-                        ? 'text-gray-300 hover:text-white' 
-                        : 'text-gray-600 hover:text-black'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Contact
-                  </a>
+                  <Link href="/contact">
+                    <a 
+                      className={`block text-lg transition-colors ${
+                        isDarkMode 
+                          ? 'text-gray-300 hover:text-white' 
+                          : 'text-gray-600 hover:text-black'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Contact
+                    </a>
+                  </Link>
                 </nav>
               </div>
               
