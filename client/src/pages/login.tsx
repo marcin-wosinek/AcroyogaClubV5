@@ -23,31 +23,14 @@ export default function Login() {
     setError("");
     setIsLoading(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Find user in mock data
-    const user = mockUsers.find(u => u.email === email);
-    
-    if (!user) {
-      setError("No account found with this email address");
+    // Send credentials to backend
+    const result = await login(email, password);
+    if (!result.success) {
+      setError(result.message);
       setIsLoading(false);
       return;
     }
-
-    // For demo purposes, accept any password for existing users
-    // In production, this would verify against hashed passwords
-    if (password.length < 1) {
-      setError("Please enter a password");
-      setIsLoading(false);
-      return;
-    }
-
-    // Use the centralized auth context to log in
-    login(user);
-    
     setIsLoading(false);
-    // Redirect to home page
     setLocation('/');
   };
 
