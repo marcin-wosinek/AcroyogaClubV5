@@ -121,22 +121,32 @@ export default function Home() {
               <h1 className="text-3xl font-light tracking-wide">Acroyoga Club</h1>
               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Valencia, Spain</p>
             </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#" className={`transition-colors ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Activities</a>
-              <a href="#" className={`transition-colors ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>About</a>
-              <a href="#" className={`transition-colors ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Contact</a>
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-6">
+                <a href="#" className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white' 
+                    : 'text-gray-600 hover:text-black'
+                }`}>Activities</a>
+                <a href="#" className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white' 
+                    : 'text-gray-600 hover:text-black'
+                }`}>About</a>
+                <a href="#" className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white' 
+                    : 'text-gray-600 hover:text-black'
+                }`}>Contact</a>
+                <Button className={`border-0 ${
+                  isDarkMode 
+                    ? 'bg-white text-black hover:bg-gray-200' 
+                    : 'bg-black text-white hover:bg-gray-800'
+                }`}>
+                  Login
+                </Button>
+              </div>
+              
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -149,26 +159,20 @@ export default function Home() {
               >
                 {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
-              <Button className={`border-0 ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-200' 
-                  : 'bg-black text-white hover:bg-gray-800'
-              }`}>
-                Login
+              
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className={`md:hidden ${
+                  isDarkMode 
+                    ? 'text-white hover:bg-gray-700' 
+                    : 'text-black hover:bg-gray-200'
+                }`}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className={`md:hidden ${
-                isDarkMode 
-                  ? 'text-white hover:bg-gray-700' 
-                  : 'text-black hover:bg-gray-200'
-              }`}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
           </div>
         </div>
         
@@ -195,20 +199,8 @@ export default function Home() {
                   ? 'text-gray-300 hover:text-white' 
                   : 'text-gray-600 hover:text-black'
               }`}>Contact</a>
-              <div className="flex items-center justify-between pt-2">
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={toggleTheme}
-                  className={`${
-                    isDarkMode 
-                      ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
-                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
-                  }`}
-                >
-                  {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                </Button>
-                <Button className={`flex-1 ml-4 border-0 ${
+              <div className="pt-2">
+                <Button className={`w-full border-0 ${
                   isDarkMode 
                     ? 'bg-white text-black hover:bg-gray-200' 
                     : 'bg-black text-white hover:bg-gray-800'
