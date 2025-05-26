@@ -1,5 +1,17 @@
 import { Request, Response } from "express";
 import fetch from "node-fetch";
+import rateLimit from "express-rate-limit"; // Add this import
+import express from "express";
+
+// Rate limiter middleware: 5 requests per hour per IP
+export const contactRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5, // limit each IP to 5 requests per windowMs
+  message: {
+    success: false,
+    message: "Too many contact requests from this IP, please try again later.",
+  },
+});
 
 // Contact form submission handler
 export async function contactHandler(req: Request, res: Response) {
@@ -80,4 +92,11 @@ export async function contactHandler(req: Request, res: Response) {
     });
   }
 }
+
+// Example usage in your Express app/router
+const router = express.Router();
+
+router.post("/api/contact", contactRateLimiter, contactHandler);
+
+export default router;
 
