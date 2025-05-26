@@ -1,14 +1,10 @@
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
-import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
-import { formatTime } from "../mockData";
-import { useActivities } from "../hooks/use-activities";
-import type { Activity } from "../../../shared/schema";
+import { ActivityCalendar } from "../components/ActivityCalendar";
+import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
 
 export default function Home() {
   const [location, setLocation] = useLocation();
@@ -75,32 +71,12 @@ export default function Home() {
     setIsDarkMode(!isDarkMode);
   };
 
-  // Using properly structured mock data from shared schema
-
   const formatDateString = (date: Date) => {
     // Ensure we're working with local date, not UTC
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  };
-
-  const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
-  const activitiesForSelectedDate = activities.filter((activity: Activity) => {
-    const activityDate = formatDateString(activity.dateTime);
-    return activityDate === selectedDateString;
-  });
-
-  const datesWithActivities = activities.map((activity: Activity) => activity.dateTime);
-
-  const modifiers = {
-    hasActivity: datesWithActivities,
-  };
-
-  const modifiersClassNames = {
-    hasActivity: `relative after:content-[""] after:absolute after:bottom-1 after:left-1/2 after:transform after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:rounded-full ${
-      isDarkMode ? 'after:bg-white' : 'after:bg-black'
-    }`,
   };
 
   return (
