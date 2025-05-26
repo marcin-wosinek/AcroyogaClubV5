@@ -269,8 +269,19 @@ export default function ActivityDetail() {
                       <div className="flex items-start space-x-3 mb-2">
                         <MapPin className="h-4 w-4 mt-0.5" />
                         <div>
-                          <div className="font-medium">{activity.locationName}</div>
-                          <div className="text-xs opacity-75">{activity.locationAddress}</div>
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${activity.locationName}, ${activity.locationAddress}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`hover:underline transition-colors ${
+                              isDarkMode 
+                                ? 'hover:text-white' 
+                                : 'hover:text-black'
+                            }`}
+                          >
+                            <div className="font-medium">{activity.locationName}</div>
+                            <div className="text-xs opacity-75">{activity.locationAddress}</div>
+                          </a>
                         </div>
                       </div>
                     </div>
