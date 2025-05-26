@@ -49,9 +49,9 @@ export async function contactHandler(req: Request, res: Response) {
       },
       body: JSON.stringify({
         from: "contact@acroyogaclub.com", // Change as needed
-        to: ["info@acroyogaclub.com"], // Change as needed
+        to: ["marcin.wosinek@gmail.com"], // Send to Marcin Wosinek
         subject: `[Contact] ${subject}`,
-        reply_to: email,
+        reply_to: email, // Use provided email as reply_to
         html: `<p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`
       })
     });
