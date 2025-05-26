@@ -292,7 +292,8 @@ export default function ActivityDetail() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  className={`flex-1 border-0 ${
+                  size="default"
+                  className={`flex-1 h-10 border-0 ${
                     isDarkMode 
                       ? 'bg-white text-black hover:bg-gray-200' 
                       : 'bg-black text-white hover:bg-gray-800'
@@ -301,9 +302,10 @@ export default function ActivityDetail() {
                   Join Activity
                 </Button>
                 <Button 
+                  size="default"
                   variant="outline"
                   onClick={() => setShowCalendarModal(true)}
-                  className={`flex-1 ${
+                  className={`flex-1 h-10 ${
                     isDarkMode 
                       ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' 
                       : 'border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black'
