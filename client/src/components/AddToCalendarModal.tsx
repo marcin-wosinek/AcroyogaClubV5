@@ -26,19 +26,19 @@ export function AddToCalendarModal({
 
   const createGoogleCalendarUrl = () => {
     const startTime = formatDateForCalendar(activity.dateTime);
-
-    // Assuming 90 minutes duration for acroyoga sessions
     const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
     const endTimeFormatted = formatDateForCalendar(endTime);
+
+    // Add a link back to the activity page
+    const activityUrl = `${window.location.origin}/activity/${activity.id}`;
+    const details = `${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}\n\nSee details: ${activityUrl}`;
 
     const params = new URLSearchParams({
       action: "TEMPLATE",
       text: activity.title,
       dates: `${startTime}/${endTimeFormatted}`,
       location: `${activity.locationName}, ${activity.locationAddress}`,
-      details:
-        activity.description ||
-        "Join us for an amazing acroyoga session! Perfect for all skill levels.",
+      details,
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -46,29 +46,12 @@ export function AddToCalendarModal({
 
   const downloadICalFile = () => {
     const startTime = formatDateForICS(activity.dateTime);
-
-    // Assuming 90 minutes duration for acroyoga sessions
     const endTime = new Date(activity.dateTime.getTime() + 90 * 60 * 1000);
     const endTimeFormatted = formatDateForICS(endTime);
+    const activityUrl = `${window.location.origin}/activity/${activity.id}`;
+    const description = `${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}\n\nSee details: ${activityUrl}`;
 
-    const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Acroyoga Club Valencia//EN
-BEGIN:VEVENT
-UID:${activity.id}@acroyoga-club-valencia.com
-DTSTART:${startTime}
-DTEND:${endTimeFormatted}
-SUMMARY:${activity.title}
-DESCRIPTION:${activity.description || "Join us for an amazing acroyoga session! Perfect for all skill levels."}
-LOCATION:${activity.locationName}, ${activity.locationAddress}
-STATUS:CONFIRMED
-BEGIN:VALARM
-TRIGGER:-PT15M
-ACTION:DISPLAY
-DESCRIPTION:Reminder: ${activity.title} starts in 15 minutes
-END:VALARM
-END:VEVENT
-END:VCALENDAR`;
+    const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Acroyoga Club Valencia//EN\nBEGIN:VEVENT\nUID:${activity.id}@acroyoga-club-valencia.com\nDTSTART:${startTime}\nDTEND:${endTimeFormatted}\nSUMMARY:${activity.title}\nDESCRIPTION:${description}\nLOCATION:${activity.locationName}, ${activity.locationAddress}\nSTATUS:CONFIRMED\nBEGIN:VALARM\nTRIGGER:-PT15M\nACTION:DISPLAY\nDESCRIPTION:Reminder: ${activity.title} starts in 15 minutes\nEND:VALARM\nEND:VEVENT\nEND:VCALENDAR`;
 
     const blob = new Blob([icsContent], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
