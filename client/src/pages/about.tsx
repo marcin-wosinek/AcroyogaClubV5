@@ -1,65 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun, Moon, User, LogOut } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useLocation, useSearch, Link } from "wouter";
-import { ActivityCalendar } from "../components/ActivityCalendar";
-import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
+import { Card, CardContent } from "@/components/ui/card";
+import { Menu, X, Sun, Moon, User, LogOut, ArrowLeft, Users, Heart, Star } from "lucide-react";
+import { useState } from "react";
+import { Link } from "wouter";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 
-export default function Home() {
-  const [location, setLocation] = useLocation();
-  const searchParams = useSearch();
+export default function About() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
-
-  const formatDateString = (date: Date) => {
-    // Ensure we're working with local date, not UTC
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  // Parse date from URL or default to today
-  const getInitialDate = (): Date => {
-    const params = new URLSearchParams(searchParams);
-    const dateParam = params.get('date');
-    
-    if (dateParam) {
-      const parsedDate = new Date(dateParam);
-      // Check if the date is valid
-      if (!isNaN(parsedDate.getTime())) {
-        return parsedDate;
-      }
-    }
-    
-    return new Date();
-  };
-
-  const [date, setDate] = useState<Date | undefined>(getInitialDate);
-
-  // Update URL when date changes (without adding to history)
-  const handleDateChange = (newDate: Date | undefined) => {
-    setDate(newDate);
-    
-    if (newDate) {
-      const dateString = formatDateString(newDate);
-      const params = new URLSearchParams(searchParams);
-      params.set('date', dateString);
-      
-      // Use replaceState to update URL without creating new history entry
-      const newUrl = `${location}?${params.toString()}`;
-      window.history.replaceState(null, '', newUrl);
-    }
-  };
-
-  // Update date when URL changes (for browser back/forward)
-  useEffect(() => {
-    const newDate = getInitialDate();
-    setDate(newDate);
-  }, [searchParams]);
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
@@ -75,23 +25,25 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <div>
-              <h1 className="text-3xl font-light tracking-wide">Acroyoga Club</h1>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Valencia, Spain</p>
-            </div>
+            <Link href="/">
+              <div className="cursor-pointer">
+                <h1 className="text-3xl font-light tracking-wide">Acroyoga Club</h1>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Valencia, Spain</p>
+              </div>
+            </Link>
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#" className={`transition-colors ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-black'
-              }`}>Activities</a>
-              <Link href="/about">
+              <Link href="/">
                 <a className={`transition-colors ${
                   isDarkMode 
                     ? 'text-gray-300 hover:text-white' 
                     : 'text-gray-600 hover:text-black'
-                }`}>About</a>
+                }`}>Activities</a>
               </Link>
+              <a href="#" className={`transition-colors ${
+                isDarkMode 
+                  ? 'text-gray-300 hover:text-white' 
+                  : 'text-gray-600 hover:text-black'
+              }`}>About</a>
               <a href="#" className={`transition-colors ${
                 isDarkMode 
                   ? 'text-gray-300 hover:text-white' 
@@ -208,6 +160,18 @@ export default function Home() {
               {/* Menu Items */}
               <div className="flex-1 px-4 py-6">
                 <nav className="space-y-6">
+                  <Link href="/">
+                    <a 
+                      className={`block text-lg transition-colors ${
+                        isDarkMode 
+                          ? 'text-gray-300 hover:text-white' 
+                          : 'text-gray-600 hover:text-black'
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Activities
+                    </a>
+                  </Link>
                   <a 
                     href="#" 
                     className={`block text-lg transition-colors ${
@@ -217,20 +181,8 @@ export default function Home() {
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Activities
+                    About
                   </a>
-                  <Link href="/about">
-                    <a 
-                      className={`block text-lg transition-colors ${
-                        isDarkMode 
-                          ? 'text-gray-300 hover:text-white' 
-                          : 'text-gray-600 hover:text-black'
-                      }`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      About
-                    </a>
-                  </Link>
                   <a 
                     href="#" 
                     className={`block text-lg transition-colors ${
@@ -293,20 +245,140 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="min-h-[calc(100vh-80px)] p-4 lg:p-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl lg:text-4xl font-light text-center mb-6 lg:mb-8">Activity Calendar</h2>
-          
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-            {/* Calendar */}
-            <ActivityCalendar 
-              date={date}
-              onDateChange={handleDateChange}
-            />
-            
-            {/* Activity Details */}
-            <ActivityDetailsSummary 
-              date={date}
-            />
+        <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <div className="mb-6">
+            <Link href="/">
+              <Button 
+                variant="ghost"
+                className={`transition-colors ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-700' 
+                    : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                }`}
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Calendar
+              </Button>
+            </Link>
+          </div>
+
+          {/* About Content */}
+          <div className="space-y-8">
+            {/* Hero Section */}
+            <div className="text-center space-y-4">
+              <h1 className="text-4xl lg:text-5xl font-light">About Acroyoga Club</h1>
+              <p className={`text-xl lg:text-2xl ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                Building connections through movement and trust in Valencia
+              </p>
+            </div>
+
+            {/* What is Acroyoga */}
+            <Card className={`border transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-black border-gray-700 text-white' 
+                : 'bg-white border-gray-200 text-black'
+            }`}>
+              <CardContent className="p-6 lg:p-8">
+                <h2 className="text-2xl font-light mb-4">What is Acroyoga?</h2>
+                <p className={`text-lg leading-relaxed ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
+                  Acroyoga is a beautiful practice that combines the wisdom of yoga, the dynamic power of acrobatics, 
+                  and the loving-kindness of healing arts. It's about connection, trust, and playful exploration of 
+                  movement with partners. Whether you're flying through the air or providing a stable base, 
+                  every role teaches us something valuable about ourselves and others.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Our Mission */}
+            <Card className={`border transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-black border-gray-700 text-white' 
+                : 'bg-white border-gray-200 text-black'
+            }`}>
+              <CardContent className="p-6 lg:p-8">
+                <h2 className="text-2xl font-light mb-4">Our Mission</h2>
+                <p className={`text-lg leading-relaxed mb-6 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
+                  We're dedicated to creating a welcoming space where people of all backgrounds and skill levels 
+                  can explore the joy of acroyoga. Our club fosters community, personal growth, and the magic 
+                  that happens when we support each other both on and off the mat.
+                </p>
+                
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="text-center space-y-3">
+                    <Users className="h-8 w-8 mx-auto" />
+                    <h3 className="font-medium">Community</h3>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Building lasting friendships through shared practice
+                    </p>
+                  </div>
+                  <div className="text-center space-y-3">
+                    <Heart className="h-8 w-8 mx-auto" />
+                    <h3 className="font-medium">Trust</h3>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Developing confidence in ourselves and others
+                    </p>
+                  </div>
+                  <div className="text-center space-y-3">
+                    <Star className="h-8 w-8 mx-auto" />
+                    <h3 className="font-medium">Growth</h3>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Expanding physical and emotional boundaries
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Join Us */}
+            <Card className={`border transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-black border-gray-700 text-white' 
+                : 'bg-white border-gray-200 text-black'
+            }`}>
+              <CardContent className="p-6 lg:p-8">
+                <h2 className="text-2xl font-light mb-4">Join Our Community</h2>
+                <p className={`text-lg leading-relaxed mb-6 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
+                  Ready to start your acroyoga journey? We welcome practitioners of all levels, from complete 
+                  beginners to experienced acrobats. Our regular sessions include warm-ups, skill-building, 
+                  and plenty of time for creative flow.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/">
+                    <Button className={`flex-1 border-0 ${
+                      isDarkMode 
+                        ? 'bg-white text-black hover:bg-gray-200' 
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}>
+                      View Activities
+                    </Button>
+                  </Link>
+                  {!isAuthenticated && (
+                    <Link href="/login">
+                      <Button 
+                        variant="outline" 
+                        className={`flex-1 ${
+                          isDarkMode 
+                            ? 'border-gray-600 text-gray-300 hover:bg-gray-800' 
+                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        Join the Club
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
