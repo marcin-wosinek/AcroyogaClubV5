@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { mockUsers } from "@shared/mockData";
-import { Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import { Header } from "../components/Header";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -40,37 +39,7 @@ export default function Login() {
         isDarkMode ? "bg-black text-white" : "bg-white text-black"
       }`}
     >
-      {/* Header */}
-      <header
-        className={`border-b transition-colors duration-300 ${
-          isDarkMode ? "border-gray-800 bg-gray-900" : "border-gray-200 bg-gray-50"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link href="/">
-              <div className="cursor-pointer">
-                <h1 className="text-3xl font-light tracking-wide">Acroyoga Club</h1>
-                <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                  Valencia, Spain
-                </p>
-              </div>
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className={`${
-                isDarkMode
-                  ? "text-gray-300 hover:text-white hover:bg-gray-700"
-                  : "text-gray-600 hover:text-black hover:bg-gray-200"
-              }`}
-            >
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
