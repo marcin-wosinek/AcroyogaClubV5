@@ -159,7 +159,17 @@ export default function Home() {
         {/* Calendar Section */}
         <div className="flex-1 p-4 lg:p-8 lg:border-r border-gray-800">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl lg:text-4xl font-light mb-6 lg:mb-8 text-center">Activity Calendar</h2>
+            <div className="flex items-center justify-between mb-6 lg:mb-8">
+              <h2 className="text-3xl lg:text-4xl font-light text-center flex-1">Activity Calendar</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDate(new Date())}
+                className="ml-4 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+              >
+                Today
+              </Button>
+            </div>
             <div className="bg-gray-900 rounded-2xl p-4 lg:p-8">
               <Calendar
                 mode="single"
