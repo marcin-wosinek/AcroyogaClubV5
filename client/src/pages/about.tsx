@@ -1,9 +1,9 @@
+import { Header } from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Users, Heart, Star } from "lucide-react";
 import { Link } from "wouter";
-import { Header } from "../components/Header";
 
 export default function About() {
   const { isDarkMode } = useTheme();

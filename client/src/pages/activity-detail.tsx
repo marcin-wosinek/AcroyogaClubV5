@@ -1,5 +1,6 @@
 import type { Activity } from "../../../shared/schema";
 import { AddToCalendarModal } from "../components/AddToCalendarModal";
+import { Header } from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { mockActivities, formatTime } from "../mockData";
@@ -7,16 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ArrowLeft,
-  Users,
-  MapPin,
-  Clock,
-  Calendar as CalendarIcon,
-} from "lucide-react";
+import { ArrowLeft, Users, MapPin, Clock, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useParams, useLocation, Link } from "wouter";
-import { Header } from "../components/Header";
 
 export default function ActivityDetail() {
   const { id } = useParams<{ id: string }>();
@@ -33,8 +27,8 @@ export default function ActivityDetail() {
 
   const handleJoinActivity = async () => {
     if (!isAuthenticated) {
-      // Redirect to login page
-      setLocation("/login");
+      // Redirect to login page with redirect parameter back to this activity
+      setLocation(`/login?redirect=/activity/${id}`);
       return;
     }
 
@@ -184,9 +178,7 @@ export default function ActivityDetail() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`text-sm transition-colors hover:underline ${
-                    isDarkMode
-                      ? "text-gray-400 hover:text-white"
-                      : "text-gray-600 hover:text-black"
+                    isDarkMode ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"
                   }`}
                 >
                   {activity.locationAddress}

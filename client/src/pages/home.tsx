@@ -1,9 +1,9 @@
 import { ActivityCalendar } from "../components/ActivityCalendar";
 import { ActivityDetailsSummary } from "../components/ActivityDetailsSummary";
+import { Header } from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
-import { Header } from "../components/Header";
 
 export default function Home() {
   const [location, setLocation] = useLocation();
