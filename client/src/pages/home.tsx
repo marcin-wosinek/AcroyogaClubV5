@@ -5,7 +5,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Users, MapPin, Clock, Menu, X, Calendar as CalendarIcon, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { mockActivities, formatTime, type MockActivity } from "../mockData";
+import { mockActivities, formatTime } from "../mockData";
+import type { Activity } from "../../../shared/schema";
 
 export default function Home() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -40,12 +41,12 @@ export default function Home() {
   };
 
   const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
-  const activitiesForSelectedDate = mockActivities.filter((activity: MockActivity) => {
+  const activitiesForSelectedDate = mockActivities.filter((activity: Activity) => {
     const activityDate = formatDateString(activity.dateTime);
     return activityDate === selectedDateString;
   });
 
-  const datesWithActivities = mockActivities.map((activity: MockActivity) => activity.dateTime);
+  const datesWithActivities = mockActivities.map((activity: Activity) => activity.dateTime);
 
   const modifiers = {
     hasActivity: datesWithActivities,
