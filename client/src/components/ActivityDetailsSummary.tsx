@@ -1,5 +1,6 @@
 import type { Activity } from "../../../shared/schema";
 import { useTheme } from "../contexts/ThemeContext";
+import { formatDateString } from "../lib/utils";
 import { mockActivities, formatTime } from "../mockData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,6 @@ interface ActivityDetailsSummaryProps {
 
 export function ActivityDetailsSummary({ date }: ActivityDetailsSummaryProps) {
   const { isDarkMode } = useTheme();
-  const formatDateString = (date: Date) => {
-    // Ensure we're working with local date, not UTC
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   const selectedDateString = date ? formatDateString(date) : formatDateString(new Date());
   const activitiesForSelectedDate = mockActivities.filter((activity: Activity) => {

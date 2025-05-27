@@ -11,13 +11,6 @@ interface ActivityCalendarProps {
 
 export function ActivityCalendar({ date, onDateChange }: ActivityCalendarProps) {
   const { isDarkMode } = useTheme();
-  const formatDateString = (date: Date) => {
-    // Ensure we're working with local date, not UTC
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   const datesWithActivities = mockActivities.map((activity: Activity) => activity.dateTime);
 

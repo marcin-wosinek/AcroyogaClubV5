@@ -13,6 +13,16 @@ import type {
 } from "./schema";
 
 /**
+ * Utility function to format date as YYYY-MM-DD string
+ */
+function formatDateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Mock users representing different user types in the system
  */
 export const mockUsers: User[] = [
@@ -411,9 +421,9 @@ export const mockEmails: Email[] = [
  * Helper function to get activities for a specific date
  */
 export function getActivitiesForDate(date: Date): Activity[] {
-  const targetDate = date.toISOString().split("T")[0];
+  const targetDate = formatDateString(date);
   return mockActivities.filter((activity) => {
-    const activityDate = activity.dateTime.toISOString().split("T")[0];
+    const activityDate = formatDateString(activity.dateTime);
     return activityDate === targetDate;
   });
 }

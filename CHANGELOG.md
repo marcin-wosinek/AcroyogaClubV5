@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2025-05-27
 
 ### Added
+
 - **Login Redirect** - Added redirect parameter to login page for improved user flow
 - **Layout Component** - Refactored all pages to use a shared Layout component for consistency
 - **Calendar Sharing** - Improved calendar integration with optimized code and better user experience
